@@ -7,4 +7,4 @@ The repository contains the following documents:
 
 
 
-If you have any questions about this project, you can always contact me by sending an e-mail to <a mailto: t.c.carriere@uu.nl> t.c.carriere@uu.nl </a>.
+If you have any questions about this project, you can always contact me by sending an e-mail to t.c.carriere@uu.nl.
