@@ -1,0 +1,252 @@
+---
+title: "Online TIMSS data"
+author: "Thijs Carrière"
+date: "November 2021"
+output:
+  html_document:
+    df_print: paged
+---
+### 0. Goals of this document
+In this document, the TIMSS data files for the used countries in this project are loaded and pre-processed. This means that the data sets are modified in such a way that they are useable for the analyses further in this project.
+
+### 1. Working directionary and packages
+
+First the needed packages are loaded
+
+```{r warning=FALSE, message=FALSE}
+# Needed packages
+library(foreign)
+library(tidyverse)
+library(magrittr)
+library(dexter)
+library(plyr)
+library(ggplot2)
+library(mirt)
+library(lavaan)
+```
+
+
+### 2. Reading in data and making list out of it
+
+The data sets of the different countries are loaded in.
+
+```{r warning = FALSE, message = FALSE}
+
+# Data of some countries, need to select countries with electronic assessment -> countries with 218 columns after cleaning. 
+timss_fra <- read.spss("countryfiles/bsafram7.sav", to.data.frame = T)
+timss_eng <- read.spss("countryfiles/bsaengm7.sav", to.data.frame = T)
+timss_norw <- read.spss("countryfiles/bsanorm7.sav", to.data.frame = T)
+timss_hkg <- read.spss("countryfiles/bsahkgm7.sav", to.data.frame = T)
+timss_qat <- read.spss("countryfiles/bsaqatm7.sav", to.data.frame = T)
+timss_kor <- read.spss("countryfiles/bsakorm7.sav", to.data.frame = T)
+timss_twn <- read.spss("countryfiles/bsatwnm7.sav", to.data.frame = T)
+
+# Make list with dfs
+timss <- list(timss_fra, timss_eng, timss_hkg, timss_kor, timss_qat, timss_norw, timss_twn)
+
+```
+
+
+### 3. Cleaning data and add scores
+
+Here, items are scored and unneeded information is removed from the data sets. Information about the items used and the choices in scoring and removing can be found in the TIMSS userguide, page 63.
+
+```{r message=FALSE, warning=FALSE}
+### Data cleaning on List ###
+timss <- list(timss_fra, timss_eng, timss_hkg, timss_kor, timss_qat, timss_norw, timss_twn)
+
+# names to list
+names(timss) <- c("France", "England", "Hongkong", "Korea", "Qatar", "Norway", "Taiwan")
+names <- c("France", "England", "Hongkong", "Korea", "Qatar", "Norway", "Taiwan")
+
+# subset list
+timss <- lapply(timss, filter, IDBOOK == "Booklet 01")
+
+# clear empty columns
+for(i in 1:length(timss)){
+  timss[[i]] <- Filter(function(x)!all(is.na(x)), timss[[i]])
+}
+
+# subset relevant columns
+for(i in 1:length(timss)){
+  timss[[i]] <- timss[[i]] %>% select(-starts_with("SE"))
+}
+
+items <- colnames(timss$France[,6:49])
+
+# creating dev branche
+timss.speed.proto <- lapply(timss, select, IDCNTRY:IDSTUD, ME52024_S:ME72209_S)
+
+# pivot longer & relocate
+timss <- lapply(timss, pivot_longer, all_of(items), names_to = "item", values_to = "response")
+timss <- lapply(timss, relocate, c(item, response), .after = IDSTUD)
+
+# Filter wrong items
+timss <- lapply(timss, filter, item != "ME72007A" & item !="ME72002B" & item != "ME72007C" & item != "ME72007D" & item != "ME72007E" & item != "ME72180A" & item != "ME72180B" & item != "ME72180C" & item != "ME72198A" & item != "ME72198B" & item != "ME72170A" & item != "ME72170B" & item != "ME72170C")
+
+# This one item won't go unless doing this way ...
+timss$France <- filter(timss$France, item != "ME72007B")
+timss$England <- filter(timss$England, item != "ME72007B")
+timss$Hongkong <- filter(timss$Hongkong, item != "ME72007B")
+timss$Korea <- filter(timss$Korea, item != "ME72007B")
+timss$Qatar <- filter(timss$Qatar, item != "ME72007B")
+timss$Norway <- filter(timss$Norway, item != "ME72007B")
+timss$Taiwan <- filter(timss$Taiwan, item != "ME72007B")
+
+# Select relevant variables
+timss <- lapply(timss, select, IDCNTRY:response, ITSEX)
+
+
+# Make scoring
+timss <- lapply(timss, mutate, item_score = case_when(
+    response == "CORRECT RESPONSE" & item == "ME72007" ~ 2,
+    response == "PARTIALLY CORRECT RESPONSE" & item == "ME72007" ~ 1,
+    response == "INCORRECT RESPONSE" ~ 0,
+    response == "CORRECT RESPONSE" ~ 1,
+    response == "A*" ~ 1,
+    response == "B*" ~ 1,
+    response == "C*" ~ 1,
+    response == "D*" ~ 1,
+    response == "A" ~ 0,
+    response == "B" ~ 0,
+    response == "C" ~ 0,
+    response == "D" ~ 0,
+    response == "INCORRECT RESPONSE_duplicated_79" ~ 0,
+    is.na(response) ~ 0
+))
+```
+
+
+
+### 4. Making list with response times
+
+Here the process data used is pre-processed and made compatible with the item responses.
+
+```{r}
+# Further on response time to merge. 
+timss.speed <- timss.speed.proto
+resp.items <- colnames(timss.speed$France[,6:length(timss.speed$France)])
+
+# Numeric times
+for(i in 1:length(timss.speed)){
+  timss.speed[[i]][,6:33] <- sapply(timss.speed[[i]][,6:33], function(x){as.numeric(as.character(x))})
+}
+
+# Pivot longer response time data frame
+timss.speed <- lapply(timss.speed, pivot_longer, all_of(resp.items), names_to = "item", values_to = "time")
+
+# renaming items
+for(i in 1:length(timss.speed)){
+timss.speed[[i]]$item <- gsub("_S", "", timss.speed[[i]]$item)
+}
+
+# Making subitems of items and renaming item for merge
+timss <- lapply(timss, mutate, "subitem" = item)
+for(i in 1:length(timss)){
+  timss[[i]][,6] <- timss[[i]] %$% gsub("B", "", item)
+  timss[[i]][,6] <- timss[[i]] %$% gsub("A", "", item)
+}
+```
+
+
+### 5. Joining lists of response times and scores
+
+The item responses and process data are joined together.
+
+```{r warning=FALSE, message=FALSE}
+# Final frame, joining
+big.timss <- list(NA)
+for(i in 1:7){
+big.timss[[i]] <- full_join(timss[[i]], timss.speed[[i]])
+}
+
+names(big.timss) <- names
+
+# 1 big df
+timss.df <- rbind(big.timss[[1]], big.timss[[2]], big.timss[[3]], big.timss[[4]], big.timss[[5]], big.timss[[6]], big.timss[[7]])
+```
+
+
+### 6. Adding data to dexter
+
+The data is added to a data base to make it possible that classical psychometric properties can be investigated.
+
+```{r}
+# Making scoring rules
+scoring_rules <- timss.df %>% select(subitem, response, item_score) %>% unique()
+
+colnames(scoring_rules) <- c("item_id", "response", "item_score")
+
+# Renaming timss.df columns for dexter
+timss.df <- rename(timss.df, c("subitem" = "item_id", "IDBOOK" = "booklet_id", "IDSTUD" = "person_id"))
+
+# Creating unique person_id (person id is in multiple countries ...)
+timss.df$person_id <- paste(timss.df$IDCNTRY, timss.df$person_id)
+
+# Relevant columns
+dexter.timss <- timss.df %>% select(item_id, response, person_id, booklet_id)
+  
+# Adding to dexter
+timss.db <- start_new_project(scoring_rules, "timss.db")
+add_response_data(timss.db, dexter.timss)
+
+# Tia table
+tia_tables(timss.db)
+```
+
+
+### 7. Person data added - First DIF
+
+```{r Adding person properties}
+# Getting properties
+person.props <- timss.df %>% select(ITSEX, person_id, IDCNTRY) %>% unique
+
+# Renaming countries
+person.props$IDCNTRY <- recode(person.props$IDCNTRY, "250" = "FRA", "926" = "ENG", "344" = "HKG", "410" = "KOR", "578" = "NOR", "634" = "QAT", "158" = "TWN")
+
+timss.df$IDCNTRY <- recode(timss.df$IDCNTRY, "250" = "FRA", "926" = "ENG", "344" = "HKG", "410" = "KOR", "578" = "NOR", "634" = "QAT", "158" = "TWN")
+
+
+# Adding properties
+add_person_properties(timss.db, person.props)
+
+table <- tia_tables(timss.db)
+```
+
+
+### 8. Plotting pvalues per country
+
+Item responses are plotted to investigate a first indication for possible DIF items.
+
+```{r warning=FALSE}
+# Relevant variables
+test.df <- timss.df %>% select(IDCNTRY, item_id, item_score)
+
+# Getting mean scores per country to see possible DIF
+mean.per.country <- aggregate(test.df$item_score, by = list(timss.df$IDCNTRY, timss.df$item_id), FUN = mean, na.rm=T)
+
+
+# Plotting
+mean.per.country %>% filter(Group.1 == "FRA" | Group.1 == "TWN" | Group.1 == "QAT" | Group.1 == "ENG" | Group.1 == "KOR") %>% ggplot(aes(x = reorder(x, Group.2),y = Group.2)) +
+  geom_point(aes(colour = Group.1))
+
+mean.per.country %>%  ggplot(aes(x = x, y = Group.2)) +
+  geom_point(aes(colour = Group.1))
+
+
+test.df %>% 
+  group_by(IDCNTRY, item_id) %>%
+  dplyr::summarise(m = mean(item_score, na.rm = T)) %>% 
+  ggplot(., aes(x = reorder(item_id, m), y = m, col = IDCNTRY))+
+  geom_point()+
+  coord_flip()
+  
+```
+
+
+### 9. Head of data set
+
+```{r}
+head(timss.df)
+```
+
