@@ -3,7 +3,7 @@
 In this repository you can find all documents and code related to my Master Thesis project. 
 The project, called 'Using Process Data in the Explanation and Detection of Differential Item Functioning', tries to use process data (for example, response times) to deal with differntial item functioning. The goals are to find a use for process data in DIF detection/explanation and to see if process data can distinguish between meaningfull DIF and bias. 
 
-The repository contains the following folders:
+The repository contains the following folders:<br><br>
 
 **1. Research Report:**<br>
 In this folder, the research report is presented. In the document 'ResearchReport.pdf', the results of the first months and the analytical strategy are presented. The other documents in this folder can be used to recreate the pdf. The simulation documents in this folder can be used to obtain the recreate the numbers presented in table 1 of the research report.
@@ -15,4 +15,6 @@ In this folder, the data used in this project (public TIMSS data) is pre-process
 
 
 <br><br>
+This repository will be updated during this project regulary.
+
 If you have any questions about this project, you can always contact me by sending an e-mail to t.c.carriere@uu.nl.
