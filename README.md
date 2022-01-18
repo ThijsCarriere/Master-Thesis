@@ -12,9 +12,10 @@ In this folder, the research report is presented. In the document 'ResearchRepor
 In this folder, the data used in this project (public TIMSS data) is pre-processed to a workable format. The markdown document can be used to execute the pre-processing steps taken. The raw data sets can be found in this folder as well. The TIMSS user guide, that is used as a base for the chosen pre-processing steps, is added to this folder as well.
 <br><br>
 **3. Simulations:**
+In this folder, simulations are run to get more insights in the MIMIC model and in what outcomes of the DIF analyses and explanations can look like. In the markdown documents, different simulations are run. These simulations can be recreated with those files. 
 
 
 <br><br>
-This repository will be updated during this project regulary.
+The repository will be updated during this project regularly and folders will be added.
 
 If you have any questions about this project, you can always contact me by sending an e-mail to t.c.carriere@uu.nl.
