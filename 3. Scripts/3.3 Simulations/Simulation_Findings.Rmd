@@ -1,0 +1,1041 @@
+---
+title: "simulation_function"
+author: "Thijs Carriere"
+date: "1-3-2022"
+output: html_document
+---
+
+```{r}
+# Packages for this simulation
+library(lavaan) 
+library(mvtnorm)
+library(MASS)
+library(tidyverse)
+
+# Data
+load("~/GitHub/Master-Thesis/2. Data/2.3 Simulated data/Simulation_outcomes.RData")
+```
+
+
+## Results ##
+
+```{r}
+# Get correct data frame
+resul1 <- findings16.end[[1]]
+resul2 <- findings16.end[[2]]
+
+# Remove common non-convergence
+resul1 <- resul1 %>% drop_na(PE.pvalue) 
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/8),1] <- res
+}
+
+mean(sum1) #0.54
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.49
+
+# Cases with time and dif both significant
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.05
+
+# 0 cases of non-convergence
+```
+
+
+# Outcome 15
+
+```{r}
+# Get correct data frame
+resul1 <- findings15.end[[1]]
+resul2 <- findings15.end[[2]]
+
+# Check for missings
+resul1 <- resul1 %>% drop_na(PE.pvalue) 
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/8),1] <- res
+}
+
+mean(sum1) #0.22
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.16
+
+# Cases with time and dif both significant
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.06
+
+# 0 cases of non-convergence
+```
+
+# Outcome 14
+
+```{r}
+# Get correct data frame
+resul1 <- findings14.end[[1]]
+resul2 <- findings14.end[[2]]
+
+
+resul1 <- resul1 %>% drop_na(PE.pvalue) # Remove common non-convergence
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/8),1] <- res
+}
+
+mean(sum1) #0.76
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.72
+
+# Cases with time and dif both significant
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.04
+
+# 0 cases of non-convergence
+
+```
+
+
+# Outcome 13
+
+```{r}
+# Correct data frame
+resul1 <- as.data.frame(findings13.end[[1]]) 
+resul2 <- as.data.frame(findings13.end[[2]]) %>% dplyr::select(1:3, 5, 8)
+
+resul1 <- resul1 %>% drop_na(PE.pvalue)
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/8),1] <- res
+}
+
+mean(sum1) #0.18
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.13
+
+# Cases with time and dif both significant
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.05
+
+```
+
+
+# Outcome 12
+
+```{r}
+# Get correct data frame
+resul1 <- findings12.end[[1]]
+resul2 <- findings12.end[[2]]
+
+# Check for missings
+resul1 <- resul1 %>% drop_na(PE.pvalue) 
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/4),1] <- res
+}
+
+mean(sum1) #0.68
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.63
+
+# Cases where both time and DIF are significant
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.05
+
+# 0 cases of non-convergence
+```
+
+
+# Outcome 11
+
+```{r}
+# Get correct data frame
+resul1 <- findings11.end[[1]]
+resul2 <- findings11.end[[2]]
+
+# Check for missings
+resul1 <- resul1 %>% drop_na(PE.pvalue) # 1 case of non-convergence
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/4),1] <- res
+}
+
+mean(sum1) # 0.2
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) # 0.14
+
+# Cases where both time and DIF are significant
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.06
+
+# 0 cases of non-convergence
+```
+
+
+# outcome 10
+
+```{r}
+resul1 <- as.data.frame(findings10.end[[1]]) 
+resul2 <- as.data.frame(findings10.end[[2]]) %>% dplyr::select(1:3, 5, 8)
+
+
+# Removing common non-convergence
+resul1 <- resul1 %>% drop_na(PE.pvalue)
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/4),1] <- res
+}
+
+mean(sum1) # 0.81
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] >.05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.74
+
+# Cases where both time and DIF are significant
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.07
+
+```
+
+
+# Outcome 9
+
+```{r}
+resul1 <- as.data.frame(findings9.end[[1]]) 
+resul2 <- as.data.frame(findings9.end[[2]]) %>% dplyr::select(1:3, 5, 8)
+
+resul1 <- resul1 %>% drop_na(PE.pvalue)
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/4),1] <- res
+}
+
+mean(sum1) # 0.27
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) # 0.23
+
+# Cases where both time and DIF are significant
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.04
+
+```
+
+
+# Oucome 8
+
+```{r}
+# Get correct data frame
+resul1 <- findings8.end[[1]]
+resul2 <- findings8.end[[2]]
+
+# Check for missings
+resul1 <- resul1 %>% drop_na(PE.pvalue) # 1 case of non-convergence
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/8),1] <- res
+}
+
+mean(sum1) # 0.98
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.91
+
+# Cases with time and dif both significant
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.07
+
+# 0 cases of non-convergence
+```
+
+# outcome 7
+
+```{r}
+# Get correct data frame
+resul1 <- findings7.end[[1]]
+resul2 <- findings7.end[[2]]
+
+# Check for missings
+resul1 <- resul1 %>% drop_na(PE.pvalue) # 1 case of non-convergence
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/8),1] <- res
+}
+
+mean(sum1) # 0.66
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) # 0.61
+
+
+# Cases with time and dif both significant
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.05
+
+# 0 cases of non-convergence
+```
+
+
+# Outcome 6
+
+```{r}
+# Get correct data frame
+resul1 <- findings6.end[[1]]
+resul2 <- findings6.end[[2]]
+
+# Check for missings
+resul1 <- resul1 %>% drop_na(PE.pvalue) 
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/8),1] <- res
+}
+
+mean(sum1) #0.99
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.87
+
+# Cases with time and dif both significant
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.12
+
+```
+
+
+# Outcome 5
+
+```{r}
+# Outcome 5
+resul1 <- findings5.end[[1]]
+resul2 <- findings5.end[[2]]
+
+resul1 <- resul1 %>% drop_na(PE.pvalue)
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/8),1] <- res
+}
+
+mean(sum1) #0.81
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) # 0.75
+
+# Cases with time and dif both significant
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.06
+
+```
+
+
+# Outcome 4
+
+```{r}
+# Get correct data frame
+resul1 <- findings4.end[[1]]
+resul2 <- findings4.end[[2]]
+
+# Check for missings
+resul1 <- resul1 %>% drop_na(PE.pvalue)
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 4 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/4),1] <- res
+}
+
+mean(sum1) # 0.98
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.84
+
+# Cases where both time and DIF are significant
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.14
+
+# 7 cases of non-convergence
+```
+
+
+# Outcome 3
+
+```{r}
+# Get correct data frame
+resul1 <- findings3.end[[1]]
+resul2 <- findings3.end[[2]]
+
+# Check for missings
+resul1 <- resul1 %>% drop_na(PE.pvalue) # 1 case of non-convergence
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/4),1] <- res
+}
+
+mean(sum1) # 0.59
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) # 0.49
+
+# Cases where both time and DIF are significant
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.1
+
+# 1 case of non-convergence
+```
+
+# Outcome 2
+
+```{r}
+# Outcome 2
+resul1 <- findings2.end[[1]]
+resul2 <- findings2.end[[2]]
+
+resul1 <- resul1 %>% drop_na(PE.pvalue)
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/4),1] <- res
+}
+
+mean(sum1) # 0.98
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) # 0.82
+
+# Cases where both time and DIF are significant
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.16
+
+```
+
+
+# Outcome 1
+
+```{r}
+# Outcome 1
+resul1 <- findings1.end[[1]]
+resul2 <- findings1.end[[2]]
+
+resul1 <- resul1 %>% drop_na(PE.pvalue)
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/4),1] <- res
+}
+
+mean(sum1) # 0.76
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) # 0.69
+
+# Cases where both time and DIF are significant
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.07
+
+# 2 non-convergence
+```
+
+
+
+# Findings of the control-conditions
+
+```{r control 1}
+# Get correct data frame
+resul1 <- findings.cont1[[1]]
+resul2 <- findings.cont1[[2]]
+
+
+# removing common non-convergence
+resul1 <- resul1 %>% drop_na(PE.pvalue) 
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/4),1] <- res
+}
+
+mean(sum1) # 0.03
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) # 0.01
+
+# Cases where both time and DIF are significant
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.02
+
+# 5 cases of non-convergence
+```
+
+
+
+
+
+```{r control 2}
+# Get correct data frame
+resul1 <- findings.cont2[[1]]
+resul2 <- findings.cont2[[2]]
+
+
+# removing common non-convergence
+resul1 <- resul1 %>% drop_na(PE.pvalue) 
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/4),1] <- res
+}
+
+mean(sum1) # 0.07
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) # 0.02
+
+# Cases where both time and DIF are significant
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.05
+
+# 6 cases of non-convergence
+```
+
+
+```{r control 3}
+# Get correct data frame
+resul1 <- findings.cont3[[1]]
+resul2 <- findings.cont3[[2]]
+
+
+# removing common non-convergence
+resul1 <- resul1 %>% drop_na(PE.pvalue) 
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/8),1] <- res
+}
+
+mean(sum1) # 0.07
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.01
+
+# Cases with time and dif both significant
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.06
+
+# 2 cases of non-convergence
+```
+
+
+```{r control 4}
+# Get correct data frame
+resul1 <- findings.cont4[[1]]
+resul2 <- findings.cont4[[2]]
+
+# removing common non-convergence
+resul1 <- resul1 %>% drop_na(PE.pvalue) 
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/8),1] <- res
+}
+
+mean(sum1) # 0.02
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.02
+
+
+# Cases with time and dif both significant
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.00
+
+# 6 cases of non-convergence
+```
+
+```{r control 5}
+# Get correct data frame
+resul1 <- findings.cont5[[1]]
+resul2 <- findings.cont5[[2]]
+
+# removing common non-convergence
+resul1 <- resul1 %>% drop_na(PE.pvalue) 
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/4),1] <- res
+}
+
+mean(sum1) # 0.03
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) # 0
+
+
+# Cases where both time and DIF are significant
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.03
+
+# 6 cases of non-convergence
+```
+
+
+```{r control 6}
+# Get correct data frame
+resul1 <- findings.cont6[[1]]
+resul2 <- findings.cont6[[2]]
+
+# removing common non-convergence
+resul1 <- resul1 %>% drop_na(PE.pvalue) 
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/4),1] <- res
+}
+
+mean(sum1) #0.03
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) # 0.01
+
+
+# Cases where both time and DIF are significant
+sum <- matrix(0, (nrow(resul1)/4), 1)
+for(i in seq(1, nrow(resul1), 4)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/4),1] <- res
+}
+
+mean(sum) #0.02
+
+# 2 cases of non-convergence
+```
+
+```{r control 7}
+# Get correct data frame
+resul1 <- findings.cont7[[1]]
+resul2 <- findings.cont7[[2]]
+
+# removing common non-convergence
+resul1 <- resul1 %>% drop_na(PE.pvalue) 
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/8),1] <- res
+}
+
+mean(sum1) # 0.01
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] >.05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.00
+
+
+# Cases with time and dif both significant
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.01
+
+# 9 cases of non-convergence
+```
+
+
+```{r control 8}
+# Get correct data frame
+resul1 <- findings.cont8[[1]]
+resul2 <- findings.cont8[[2]]
+
+# removing common non-convergence
+resul1 <- resul1 %>% drop_na(PE.pvalue) 
+resul2 <- resul2 %>% drop_na(PE.pvalue)
+
+# For the simulation with 8 items: identificantion of DIF
+sum1 <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05, 1, 0)
+sum1[(i/8),1] <- res
+}
+
+mean(sum1) # 0.02
+
+
+# For the simulations with 8 items: both DIF and explanation
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] > .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.00
+
+# Cases with time and dif both significant
+sum <- matrix(0, (nrow(resul1)/8), 1)
+for(i in seq(1, nrow(resul1), 8)){
+  res <- ifelse(resul1$PE.pvalue[i + 1] < .05 & resul2$PE.pvalue[((i*2)+1)] < .05 & resul2$PE.pvalue[((i*2)+2)] <.05, 1, 0)
+sum[(i/8),1] <- res
+}
+
+mean(sum) #0.02
+
+# 1 case of non-convergence
+```
+
+
+
+

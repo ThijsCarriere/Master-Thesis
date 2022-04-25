@@ -1,0 +1,422 @@
+---
+title: "Simulation_script"
+author: "Thijs Carriere"
+date: "25-4-2022"
+output: html_document
+---
+
+```{r}
+# Packages for this simulation
+library(lavaan) 
+library(mvtnorm)
+library(MASS)
+library(tidyverse)
+```
+
+
+
+```{r}
+sim.analyse.4dif <- function(sample.size, lat.dif, strat.sd, seed, n.iter){
+# Set seed
+set.seed(seed)
+
+  # Storage objects
+name <- c()
+name2 <- c()
+
+for(i in 1:n.iter){
+
+
+# Get thetas, same for both groups, 1000 observations per group
+group <- c(rep(1, sample.size), rep(2, sample.size))
+
+lats <- matrix(NA, (2*sample.size), 2) # matrix for latent traits (ability and speed)
+sig <- rbind(c(1, 0.4), c(0.4, 1))
+lats[1:sample.size,] <- mvrnorm(sample.size, c(lat.dif, lat.dif), sig)
+lats[(sample.size + 1):(2*sample.size),] <- mvrnorm(sample.size, c(0, 0), sig)
+colnames(lats) <- c("theta", "speed")
+
+dat <- cbind(group, lats)
+
+strat10 <- matrix(0, (2*sample.size), 30)
+strat9 <- matrix(0, (2*sample.size), 30)
+strat11 <- matrix(0, (2*sample.size), 30)
+strat12 <- matrix(0, (2*sample.size), 30)
+strat10[1:sample.size, 10] <- rnorm(sample.size, 0, 1)
+strat10[(sample.size + 1):(2*sample.size), 10] <- rnorm(sample.size, (.5*strat.sd), 1) # strategy is .5 sd difference
+strat9[1:sample.size, 9] <- rnorm(sample.size, 0, 1)
+strat9[(sample.size + 1):(2*sample.size), 9] <- rnorm(sample.size, (strat.sd*.5), 1)
+strat11[1:sample.size, 11] <- rnorm(sample.size, 0, 1)
+strat11[(sample.size + 1):(2*sample.size), 11] <- rnorm(sample.size, (strat.sd*.5), 1) # strategy is .5 sd difference
+strat12[1:sample.size, 12] <- rnorm(sample.size, 0, 1)
+strat12[(sample.size + 1):(2*sample.size), 12] <- rnorm(sample.size, (strat.sd*.5), 1)
+
+
+# Item parametesr
+b <- c(rnorm(8), 0, 0, rnorm(20))
+a <- c(runif(30, 1, 3))
+
+
+# Dichotomous outcomes
+ans <- matrix(NA, (2*sample.size), 30)
+
+for(i in 1:(2*sample.size)){
+  for(j in 1:8){
+    prob <- (exp(-b[j] + (dat[i, 2]*a[j])))/(1 + exp(-b[j] + (dat[i, 2]*a[j])))
+    ans[i, j] <- rbinom(1, 1, prob = prob)
+  }
+}
+
+for(i in 1:(2*sample.size)){
+  for(j in 13:30){
+    prob <- (exp(-b[j] + (dat[i, 2]*a[j])))/(1 + exp(-b[j] + (dat[i, 2]*a[j])))
+    ans[i, j] <- rbinom(1, 1, prob = prob)
+  }
+}
+
+for(i in 1:(2*sample.size)){
+  for(j in 9){
+    prob <- (exp(-b[j] + (dat[i, 2]*a[j]) + strat9[i, j]))/(1 + exp(-b[j] + (dat[i, 2]*a[j]) + strat9[i, j]))
+    ans[i, j] <- rbinom(1, 1, prob = prob)
+  }
+}
+
+for(i in 1:(2*sample.size)){
+  for(j in 10){
+    prob <- (exp(-b[j] + (dat[i, 2]*a[j]) + strat10[i, j]))/(1 + exp(-b[j] + (dat[i, 2]*a[j]) + strat10[i, j]))
+    ans[i, j] <- rbinom(1, 1, prob = prob)
+  }
+}
+
+for(i in 1:(2*sample.size)){
+  for(j in 11){
+    prob <- (exp(-b[j] + (dat[i, 2]*a[j]) + strat11[i, j]))/(1 + exp(-b[j] + (dat[i, 2]*a[j]) + strat11[i, j]))
+    ans[i, j] <- rbinom(1, 1, prob = prob)
+  }
+}
+
+for(i in 1:(2*sample.size)){
+  for(j in 12){
+    prob <- (exp(-b[j] + (dat[i, 2]*a[j]) + strat12[i, j]))/(1 + exp(-b[j] + (dat[i, 2]*a[j]) + strat12[i, j]))
+    ans[i, j] <- rbinom(1, 1, prob = prob)
+  }
+}
+
+
+
+# Times
+times <- rep(4, 30) - t(matrix(1,30))%x%lats[,2] + mvrnorm((2*sample.size), rep(0, 30), diag(rep(.2,30))) + strat10
+
+
+person_means <- apply(times[,-10],1,mean)  # person time means, proxy for the latent variable in Van der Linden model. Keep the DIF item out!
+
+T_std <- times
+
+T_std <- times - person_means
+
+dat <- cbind(group, lats, ans, T_std)
+colnames(dat) <- c("grp", "theta", "speed", "y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9", "y10", "y11", "y12", "y13", "y14", "y15", "y16", "y17", "y18", "y19", "y20", "y21", "y22", "y23", "y24", "y25", "y26", "y27", "y28", "y29", "y30", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12", "t13", "t14", "t15", "t16", "t17", "t18", "t19", "t20", "t21", "t22", "t23", "t24", "t25", "t26", "t27", "t28", "t29", "t30")
+
+
+# Model 1
+mod1 <- "
+f1=~y1+y2+y3+y4+y5+y6+y7+y8+y9+y10+y11+y12+y13+y14+y15+y16+y17+y18+y19+y20+y21+y22+y23+y24+y25+y26+y27+y28+y29+y30
+f1 ~ grp;
+y3 ~ grp;
+y4 ~ grp;
+y5 ~ grp;
+y6 ~ grp;
+y7 ~ grp;
+y8 ~ grp;
+y9 ~ grp;
+y10 ~ grp;
+y11 ~ grp;
+y12 ~ grp;
+y13 ~ grp;
+y14 ~ grp;
+"
+
+mod.res1 <- cfa(mod1, data = dat, ordered = colnames(dat[,4:33]))
+df1 <- as.data.frame(summary(mod.res1)[1])
+df2 <- df1 %>% filter(PE.lhs == "y9" | PE.lhs == "y10" | PE.lhs == "y11" | PE.lhs == "y12")
+df3 <- df2 %>% filter(PE.rhs == "grp") %>% dplyr::select(-c(PE.exo, PE.z))
+
+name <- rbind(name, df3)
+
+# findings4.1 <- rbind(findings4.1, df3)
+
+# Model 2 
+mod2 <- "
+f1=~y1+y2+y3+y4+y5+y6+y7+y8+y9+y10+y11+y12+y13+y14+y15+y16+y17+y18+y19+y20+y21+y22+y23+y24+y25+y26+y27+y28+y29+y30
+f1 ~ grp;
+y9 ~ grp + t9;
+y10 ~ grp + t10;
+y11 ~ grp + t11;
+y12 ~ grp + t12
+"
+
+mod.res2 <- cfa(mod2, data = dat, ordered = colnames(dat[,4:33]))
+df1 <- as.data.frame(summary(mod.res2)[1])
+df2 <- df1 %>% filter(PE.lhs == "y9" | PE.lhs == "y10" | PE.lhs == "y11" | PE.lhs == "y12")
+df3 <- df2 %>% filter(PE.rhs == "grp" | PE.rhs == "t9" | PE.rhs == "t10" | PE.rhs == "t11" | PE.rhs == "t12")
+
+name2 <- rbind(name2, df3)
+
+}
+
+output <- list(name, name2)
+return(output)
+}
+
+
+
+# 8 item function
+
+sim.analyse.8dif <- function(sample.size, lat.dif, strat.sd, seed, n.iter){
+# Set seed
+set.seed(seed)
+
+  # Storage objects
+name <- c()
+name2 <- c()
+
+for(i in 1:n.iter){
+
+
+# Get thetas, same for both groups, 1000 observations per group
+group <- c(rep(1, sample.size), rep(2, sample.size))
+
+lats <- matrix(NA, (2*sample.size), 2) # matrix for latent traits (ability and speed)
+sig <- rbind(c(1, 0.4), c(0.4, 1))
+lats[1:sample.size,] <- mvrnorm(sample.size, c(lat.dif, lat.dif), sig)
+lats[(sample.size + 1):(2*sample.size),] <- mvrnorm(sample.size, c(0, 0), sig)
+colnames(lats) <- c("theta", "speed")
+
+dat <- cbind(group, lats)
+
+strat10 <- matrix(0, (2*sample.size), 30)
+strat9 <- matrix(0, (2*sample.size), 30)
+strat11 <- matrix(0, (2*sample.size), 30)
+strat12 <- matrix(0, (2*sample.size), 30)
+strat10[1:sample.size, 10] <- rnorm(sample.size, 0, 1)
+strat10[(sample.size + 1):(2*sample.size), 10] <- rnorm(sample.size, (.5*strat.sd), 1) # strategy is .5 sd difference
+strat9[1:sample.size, 9] <- rnorm(sample.size, 0, 1)
+strat9[(sample.size + 1):(2*sample.size), 9] <- rnorm(sample.size, (strat.sd*.5), 1)
+strat11[1:sample.size, 11] <- rnorm(sample.size, 0, 1)
+strat11[(sample.size + 1):(2*sample.size), 11] <- rnorm(sample.size, (strat.sd*.5), 1) # strategy is .5 sd difference
+strat12[1:sample.size, 12] <- rnorm(sample.size, 0, 1)
+strat12[(sample.size + 1):(2*sample.size), 12] <- rnorm(sample.size, (strat.sd*.5), 1)
+
+# Additional items with dif
+strat12[1:sample.size, 13] <- rnorm(sample.size, 0, 1)
+strat12[(sample.size + 1):(2*sample.size), 13] <- rnorm(sample.size, (strat.sd*.5), 1)
+strat12[1:sample.size, 14] <- rnorm(sample.size, 0, 1)
+strat12[(sample.size + 1):(2*sample.size), 14] <- rnorm(sample.size, (strat.sd*.5), 1)
+strat12[1:sample.size, 15] <- rnorm(sample.size, 0, 1)
+strat12[(sample.size + 1):(2*sample.size), 15] <- rnorm(sample.size, (strat.sd*.5), 1)
+strat12[1:sample.size, 16] <- rnorm(sample.size, 0, 1)
+strat12[(sample.size + 1):(2*sample.size), 16] <- rnorm(sample.size, (strat.sd*.5), 1)
+
+
+# Item parametesr
+b <- c(rnorm(8), 0, 0, rnorm(20))
+a <- c(runif(30, 1, 3))
+
+
+# Dichotomous outcomes
+ans <- matrix(NA, (2*sample.size), 30)
+
+for(i in 1:(2*sample.size)){
+  for(j in 1:8){
+    prob <- (exp(-b[j] + (dat[i, 2]*a[j])))/(1 + exp(-b[j] + (dat[i, 2]*a[j])))
+    ans[i, j] <- rbinom(1, 1, prob = prob)
+  }
+}
+
+for(i in 1:(2*sample.size)){
+  for(j in 17:30){
+    prob <- (exp(-b[j] + (dat[i, 2]*a[j])))/(1 + exp(-b[j] + (dat[i, 2]*a[j])))
+    ans[i, j] <- rbinom(1, 1, prob = prob)
+  }
+}
+
+for(i in 1:(2*sample.size)){
+  for(j in 9){
+    prob <- (exp(-b[j] + (dat[i, 2]*a[j]) + strat9[i, j]))/(1 + exp(-b[j] + (dat[i, 2]*a[j]) + strat9[i, j]))
+    ans[i, j] <- rbinom(1, 1, prob = prob)
+  }
+}
+
+for(i in 1:(2*sample.size)){
+  for(j in 10){
+    prob <- (exp(-b[j] + (dat[i, 2]*a[j]) + strat10[i, j]))/(1 + exp(-b[j] + (dat[i, 2]*a[j]) + strat10[i, j]))
+    ans[i, j] <- rbinom(1, 1, prob = prob)
+  }
+}
+
+for(i in 1:(2*sample.size)){
+  for(j in 11){
+    prob <- (exp(-b[j] + (dat[i, 2]*a[j]) + strat11[i, j]))/(1 + exp(-b[j] + (dat[i, 2]*a[j]) + strat11[i, j]))
+    ans[i, j] <- rbinom(1, 1, prob = prob)
+  }
+}
+
+for(i in 1:(2*sample.size)){
+  for(j in 12:16){
+    prob <- (exp(-b[j] + (dat[i, 2]*a[j]) + strat12[i, j]))/(1 + exp(-b[j] + (dat[i, 2]*a[j]) + strat12[i, j]))
+    ans[i, j] <- rbinom(1, 1, prob = prob)
+  }
+}
+
+
+
+# Times
+times <- rep(4, 30) - t(matrix(1,30))%x%lats[,2] + mvrnorm((2*sample.size), rep(0, 30), diag(rep(.2,30))) + strat10
+
+
+person_means <- apply(times[,-10],1,mean)  # person time means, proxy for the latent variable in Van der Linden model. Keep the DIF item out!
+
+T_std <- times
+
+T_std <- times - person_means
+
+dat <- cbind(group, lats, ans, T_std)
+colnames(dat) <- c("grp", "theta", "speed", "y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9", "y10", "y11", "y12", "y13", "y14", "y15", "y16", "y17", "y18", "y19", "y20", "y21", "y22", "y23", "y24", "y25", "y26", "y27", "y28", "y29", "y30", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12", "t13", "t14", "t15", "t16", "t17", "t18", "t19", "t20", "t21", "t22", "t23", "t24", "t25", "t26", "t27", "t28", "t29", "t30")
+
+
+# Model 1
+mod1 <- "
+f1=~y1+y2+y3+y4+y5+y6+y7+y8+y9+y10+y11+y12+y13+y14+y15+y16+y17+y18+y19+y20+y21+y22+y23+y24+y25+y26+y27+y28+y29+y30
+f1 ~ grp;
+y3 ~ grp;
+y4 ~ grp;
+y5 ~ grp;
+y6 ~ grp;
+y7 ~ grp;
+y8 ~ grp;
+y9 ~ grp;
+y10 ~ grp;
+y11 ~ grp;
+y12 ~ grp;
+y13 ~ grp;
+y14 ~ grp;
+y15 ~ grp;
+y16 ~ grp;
+y17 ~ grp;
+y18 ~ grp;
+"
+
+mod.res1 <- cfa(mod1, data = dat, ordered = colnames(dat[,4:33]))
+df1 <- as.data.frame(summary(mod.res1)[1])
+df2 <- df1 %>% filter(PE.lhs == "y9" | PE.lhs == "y10" | PE.lhs == "y11" | PE.lhs == "y12" | PE.lhs == "y13" | PE.lhs == "y14" | PE.lhs == "y15" | PE.lhs == "y16")
+df3 <- df2 %>% filter(PE.rhs == "grp") %>% dplyr::select(-c(PE.exo, PE.z))
+
+name <- rbind(name, df3)
+
+# findings4.1 <- rbind(findings4.1, df3)
+
+# Model 2 
+mod2 <- "
+f1=~y1+y2+y3+y4+y5+y6+y7+y8+y9+y10+y11+y12+y13+y14+y15+y16+y17+y18+y19+y20+y21+y22+y23+y24+y25+y26+y27+y28+y29+y30
+f1 ~ grp;
+y9 ~ grp + t9;
+y10 ~ grp + t10;
+y11 ~ grp + t11;
+y12 ~ grp + t12;
+y13 ~ grp + t13;
+y14 ~ grp + t14;
+y15 ~ grp + t15;
+y16 ~ grp + t16;
+"
+
+# run model and select relevant output
+mod.res2 <- cfa(mod2, data = dat, ordered = colnames(dat[,4:33]))
+df1 <- as.data.frame(summary(mod.res2)[1])
+df2 <- df1 %>% filter(PE.lhs == "y9" | PE.lhs == "y10" | PE.lhs == "y11" | PE.lhs == "y12" | PE.lhs == "y13" | PE.lhs == "y14" | PE.lhs == "y15" | PE.lhs == "y16")
+df3 <- df2 %>% filter(PE.rhs == "grp" | PE.rhs == "t9" | PE.rhs == "t10" | PE.rhs == "t11" | PE.rhs == "t12" | PE.rhs == "t13" | PE.rhs == "t14" | PE.rhs == "t15" | PE.rhs == "t16")
+
+name2 <- rbind(name2, df3)
+
+}
+
+# get output
+output <- list(name, name2)
+return(output)
+}
+```
+
+
+# All Simultations
+
+```{r}
+# Big sample, 4 DIF items
+findings1.end <- sim.analyse.4dif(sample.size = 2000, lat.dif = 0, strat.sd = .5, seed = 124, n.iter = 100)
+
+findings2.end <- sim.analyse.4dif(sample.size = 2000, lat.dif = 0, strat.sd = 1, seed = 756, n.iter = 100)
+
+findings3.end <- sim.analyse.4dif(sample.size = 2000, lat.dif = 1, strat.sd = .5, seed = 699, n.iter = 100)
+
+findings4.end <- sim.analyse.4dif(sample.size = 2000, lat.dif = 1, strat.sd = 1, seed = 1245, n.iter = 100)
+
+```
+
+```{r}
+# Big sample, 8 DIF items 
+findings5.end <- sim.analyse.8dif(sample.size = 2000, lat.dif = 0, strat.sd = .5, seed = 126, n.iter = 100)
+
+findings6.end <- sim.analyse.8dif(sample.size = 2000, lat.dif = 0, strat.sd = 1, seed = 158, n.iter = 100)
+
+findings7.end <- sim.analyse.8dif(sample.size = 2000, lat.dif = 1, strat.sd = .5, seed = 2, n.iter = 100)
+
+findings8.end <- sim.analyse.8dif(sample.size = 2000, lat.dif = 1, strat.sd = 1, seed = 1262, n.iter = 100)
+```
+
+
+
+```{r}
+# Small sample, 4 DIF items
+findings9.end <- sim.analyse.4dif(sample.size = 500, lat.dif = 0, strat.sd = .5, seed = 13, n.iter = 100)
+
+findings10.end <- sim.analyse.4dif(sample.size = 500, lat.dif = 0, strat.sd = 1, seed = 14, n.iter = 100)
+
+findings11.end <- sim.analyse.4dif(sample.size = 500, lat.dif = 1, strat.sd = .5, seed = 111, n.iter = 100)
+
+findings12.end <- sim.analyse.4dif(sample.size = 500, lat.dif = 1, strat.sd = 1, seed = 1234, n.iter = 100)
+
+```
+
+
+```{r}
+# Small sample, 8 DIF items 
+findings13.end <- sim.analyse.8dif(sample.size = 500, lat.dif = 0, strat.sd = .5, seed = 123, n.iter = 100)
+
+findings14.end <- sim.analyse.8dif(sample.size = 500, lat.dif = 0, strat.sd = 1, seed = 15, n.iter = 100)
+
+findings15.end <- sim.analyse.8dif(sample.size = 500, lat.dif = 1, strat.sd = .5, seed = 777, n.iter = 100)
+
+findings16.end <- sim.analyse.8dif(sample.size = 500, lat.dif = 1, strat.sd = 1, seed = 368, n.iter = 100)
+```
+
+
+```{r}
+# control small sample
+findings.cont1 <- sim.analyse.4dif(sample.size = 500,lat.dif = 0, strat.sd = 0, seed = 6714, n.iter = 100)
+
+findings.cont2 <- sim.analyse.4dif(sample.size = 500,lat.dif = 1, strat.sd = 0, seed = 602, n.iter = 100)
+
+findings.cont3 <- sim.analyse.8dif(sample.size = 500,lat.dif = 0, strat.sd = 0, seed = 6660, n.iter = 100)
+
+findings.cont4 <- sim.analyse.8dif(sample.size = 500,lat.dif = 1, strat.sd = 0, seed = 5123, n.iter = 100)
+```
+
+
+```{r control big sample}
+# control with big sample
+findings.cont5 <- sim.analyse.4dif(sample.size = 2000,lat.dif = 0, strat.sd = 0, seed = 588, n.iter = 100)
+
+findings.cont6 <- sim.analyse.4dif(sample.size = 2000,lat.dif = 1, strat.sd = 0, seed = 234, n.iter = 100)
+
+findings.cont7 <- sim.analyse.8dif(sample.size = 2000,lat.dif = 0, strat.sd = 0, seed = 111, n.iter = 100)
+
+findings.cont8 <- sim.analyse.8dif(sample.size = 2000,lat.dif = 1, strat.sd = 0, seed = 548, n.iter = 100)
+```
