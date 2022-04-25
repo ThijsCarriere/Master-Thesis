@@ -69,13 +69,14 @@ for(i in 1:length(timss)){
 
 # subset relevant columns
 for(i in 1:length(timss)){
-  timss[[i]] <- timss[[i]] %>% select(-starts_with("SE"))
+  timss[[i]] <- timss[[i]] %>% dplyr::select(-starts_with("SE"))
 }
 
 items <- colnames(timss$France[,6:49])
 
 # creating dev branche
-timss.speed.proto <- lapply(timss, select, IDCNTRY:IDSTUD, ME52024_S:ME72209_S)
+timss.speed.proto <- lapply(timss, dplyr::select, IDCNTRY:IDSTUD, ME52024_S:ME72209_S)
+timss.freq.proto <- lapply(timss, dplyr::select, IDCNTRY:IDSTUD, ME52024_F:ME72209_F)
 
 # pivot longer & relocate
 timss <- lapply(timss, pivot_longer, all_of(items), names_to = "item", values_to = "response")
@@ -94,7 +95,7 @@ timss$Norway <- filter(timss$Norway, item != "ME72007B")
 timss$Taiwan <- filter(timss$Taiwan, item != "ME72007B")
 
 # Select relevant variables
-timss <- lapply(timss, select, IDCNTRY:response, ITSEX)
+timss <- lapply(timss, dplyr::select, IDCNTRY:response, ITSEX)
 
 
 # Make scoring
@@ -181,7 +182,7 @@ colnames(scoring_rules) <- c("item_id", "response", "item_score")
 timss.df <- rename(timss.df, c("subitem" = "item_id", "IDBOOK" = "booklet_id", "IDSTUD" = "person_id"))
 
 # Creating unique person_id (person id is in multiple countries ...)
-timss.df$person_id <- paste(timss.df$IDCNTRY, timss.df$person_id)
+timss.df$person_id <- paste(timss.df$IDCNTRY, timss.df$person_id, sep = "")
 
 # Relevant columns
 dexter.timss <- timss.df %>% select(item_id, response, person_id, booklet_id)
@@ -192,6 +193,8 @@ add_response_data(timss.db, dexter.timss)
 
 # Tia table
 tia_tables(timss.db)
+
+tia_tables(timss.db, )
 ```
 
 
@@ -211,6 +214,8 @@ timss.df$IDCNTRY <- recode(timss.df$IDCNTRY, "250" = "FRA", "926" = "ENG", "344"
 add_person_properties(timss.db, person.props)
 
 table <- tia_tables(timss.db)
+
+tia_tables(timss.db, IDCNTRY == "FRA")
 ```
 
 
@@ -248,5 +253,93 @@ test.df %>%
 
 ```{r}
 head(timss.df)
+```
+
+
+
+```{r}
+# Making country dummies
+
+timss.df$dum.fr <- ifelse(timss.df$IDCNTRY == "FRA", 1, 0)
+timss.df$dum.eng <- ifelse(timss.df$IDCNTRY == "ENG", 1, 0)
+timss.df$dum.hk <- ifelse(timss.df$IDCNTRY == "HKG", 1, 0)
+timss.df$dum.kor <- ifelse(timss.df$IDCNTRY == "KOR", 1, 0)
+timss.df$dum.qat <- ifelse(timss.df$IDCNTRY == "QAT", 1, 0)
+timss.df$dum.nor <- ifelse(timss.df$IDCNTRY == "NOR", 1, 0)
+timss.df$dum.twn <- ifelse(timss.df$IDCNTRY == "TWN", 1, 0)
+
+
+# To long wide format for mimic
+
+timss.df.long <- timss.df %>% dplyr::select(-response, -item, -time) %>% pivot_wider(names_from = item_id, values_from = item_score) 
+
+# Time df
+times.df.long <- timss.df %>% dplyr::select(-response, -item_score, - item)
+time_id <- paste(unique(timss.df$item_id), "t", sep = "")
+times.df.long$item_id2 <- rep(time_id, 1951)
+times.df.long <- times.df.long %>% dplyr::select(-item_id)
+
+times.df.long <- times.df.long %>% pivot_wider(names_from = item_id2, values_from = time)
+
+# join to good frame 
+mimic.df <-left_join(timss.df.long, times.df.long) 
+
+# countries as names
+mimic.df$IDCNTRY <- recode(mimic.df$IDCNTRY, "250" = "FRA", "926" = "ENG", "344" = "HKG", "410" = "KOR", "578" = "NOR", "634" = "QAT", "158" = "TWN")
+
+# save df
+write.csv(mimic.df, "C:/Users/thijs/Documents/Studie/Master/MSBBSS 11 - Thesis/R-data/Master Thesis/mimic_df_raw_times.csv")
+```
+
+
+```{r}
+# Centering times
+times.df <- mimic.df[,45:75]
+mean.matrix <- matrix(NA, nrow = nrow(times.df), ncol = ncol(times.df))
+
+for(i in 1:ncol(times.df)){
+  mean.matrix[,i] <- apply(times.df[,-i], 1, mean)
+}
+
+times.std <- times.df - mean.matrix
+mimic.df.stand.t <- mimic.df
+mimic.df.stand.t[,45:75] <- times.std
+
+write.csv(mimic.df.stand.t, "C:/Users/thijs/Documents/Studie/Master/MSBBSS 11 - Thesis/R-data/Master Thesis/mimic_df_standtimes.csv")
+
+```
+
+
+```{r}
+# Adding continent
+timss.cont <- timss.df.long %>% filter(IDCNTRY != "QAT")
+timss.cont$cont <- ifelse(timss.cont$IDCNTRY == "FRA" | timss.cont$IDCNTRY == "ENG" | timss.cont$IDCNTRY == "NOR", 1, 0)
+
+# So 1 for Europe, 0 for asia
+cont.times <- mimic.df.stand.t %>% filter(IDCNTRY != "QAT")
+cont.times$cont <- ifelse(cont.times$IDCNTRY == "FRA" | cont.times$IDCNTRY == "ENG" | cont.times$IDCNTRY == "NOR", 1, 0)
+
+write.csv(cont.times, "C:/Users/thijs/Documents/Studie/Master/MSBBSS 11 - Thesis/R-data/Master Thesis/mimic_cont_explain.csv" )
+write.csv(timss.cont, "C:/Users/thijs/Documents/Studie/Master/MSBBSS 11 - Thesis/R-data/Master Thesis/mimic_cont_detect.csv")
+```
+
+
+
+```{r}
+# screen visits as process data:
+freq.df <- rbind(timss.freq.proto[[1]], timss.freq.proto[[2]], timss.freq.proto[[3]], timss.freq.proto[[4]], timss.freq.proto[[5]], timss.freq.proto[[6]], timss.freq.proto[[7]])
+
+# adjust person_id
+freq.df$person_id <- paste(freq.df$IDCNTRY, freq.df$IDSTUD, sep = "")
+freq.df <- freq.df %>% dplyr::select(-IDCNTRY)
+
+
+# Combine with other df and make numeric values of frequencies.
+mimic.freq <- join(mimic.df.stand.t, freq.df, by = "person_id")
+for(i in 80:107){
+mimic.freq[,i] <- as.numeric(mimic.freq[,i])  
+}
+
+write.csv(mimic.freq, "C:/Users/thijs/Documents/Studie/Master/MSBBSS 11 - Thesis/R-data/Master Thesis/mimic_freq_explain.csv")
 ```
 

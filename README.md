@@ -1,21 +1,22 @@
 # Master-Thesis
 
 In this repository you can find all documents and code related to my Master Thesis project. 
-The project, called 'Using Process Data in the Explanation and Detection of Differential Item Functioning', tries to use process data (for example, response times) to deal with differntial item functioning. The goals are to find a use for process data in DIF detection/explanation and to see if process data can distinguish between meaningfull DIF and bias. 
+The project, called 'Using Process Data in the Explanation and Detection of Differential Item Functioning', tries to use process data (for example, response times) to deal with differential item functioning. The goals are to find a use for process data in DIF detection/explanation and to see if process data can distinguish between meaningful DIF and bias. 
 
 The repository contains the following folders:<br><br>
 
-**1. Research Report:**<br>
-In this folder, the research report is presented. In the document 'ResearchReport.pdf', the results of the first months and the analytical strategy are presented. The other documents in this folder can be used to recreate the pdf. The simulation documents in this folder can be used to obtain the recreate the numbers presented in table 1 of the research report.
+**1. Texts:**<br>
+In this folder, the documents that form the products of this project are presented. This includes the research report and the master thesis.
 <br><br>
-**2. Data Preprocessing:**<br>
-In this folder, the data used in this project (public TIMSS data) is pre-processed to a workable format. The markdown document can be used to execute the pre-processing steps taken. The raw data sets can be found in this folder as well. The TIMSS user guide, that is used as a base for the chosen pre-processing steps, is added to this folder as well.
+**2. Data:**<br>
+In this folder, all data used in this project can be found. The three subfolders give:\
+- the public raw TIMSS data, used for the empirical example (2.1)\
+- the TIMSS data after preprocessing, used for the analyses of the thesis (2.2)\
+- the data obtained by the simulations, used for the simulation outcomes in the thesis (2.3)
 <br><br>
-**3. Simulations:**<br>
-In this folder, simulations are run to get more insights in the MIMIC model and in what outcomes of the DIF analyses and explanations can look like. In the markdown documents, different simulations are run. These simulations can be recreated with those files. 
+**3. Scripts:**<br>
+In this folder, all scripts can be found that are used in the analyses and pre-processing of the project. With the use of these scripts, all results can be obtained and recreated.
 
 
 <br><br>
-The repository will be updated during this project regularly and folders will be added.
-
 If you have any questions about this project, you can always contact me by sending an e-mail to t.c.carriere@uu.nl.
