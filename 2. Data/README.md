@@ -14,4 +14,4 @@ In order to reproduce the empirical results in this thesis, these files must be 
 In the scripts folder, it is mentioned what data files are needed exactly for what results.
 
 ### **2.3 Simulation data** 
-In this folder, the outcomes of the simulation part of the study can be found. These results are then summarised and analysed with **...** to obtain the results for Table 3 and Table 4 of the Thesis.
+In this folder, the outcomes of the simulation part of the study can be found. These results are then summarised and analysed with the script 'Simulation_Findings.Rmd' in folder 3.3 to obtain the results for Table 3 and Table 4 of the Thesis.
