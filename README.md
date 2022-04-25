@@ -5,16 +5,17 @@ The project, called 'Using Process Data in the Explanation and Detection of Diff
 
 The repository contains the following folders:<br><br>
 
-##**1. Texts:**<br>
+**1. Texts:**<br>
 In this folder, the documents that form the products of this project are presented. This includes the research report and the master thesis.
 <br><br>
-##**2. Data:**<br>
+**2. Data:**<br>
 In this folder, all data used in this project can be found. The three subfolders give:
 - the public raw TIMSS data, used for the empirical example (2.1)
 - the TIMSS data after preprocessing, used for the analyses of the thesis (2.2)
 - the data obtained by the simulations, used for the simulation outcomes in the thesis (2.3)
 <br><br>
-##**3. Scripts:**<br>
+
+**3. Scripts:**<br>
 In this folder, all scripts can be found that are used in the analyses and pre-processing of the project. With the use of these scripts, all results can be obtained and recreated.
 
 
