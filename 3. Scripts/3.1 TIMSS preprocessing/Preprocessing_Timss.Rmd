@@ -33,13 +33,13 @@ The data sets of the different countries are loaded in.
 ```{r warning = FALSE, message = FALSE}
 
 # Data of some countries, need to select countries with electronic assessment -> countries with 218 columns after cleaning. 
-timss_fra <- read.spss("countryfiles/bsafram7.sav", to.data.frame = T)
-timss_eng <- read.spss("countryfiles/bsaengm7.sav", to.data.frame = T)
-timss_norw <- read.spss("countryfiles/bsanorm7.sav", to.data.frame = T)
-timss_hkg <- read.spss("countryfiles/bsahkgm7.sav", to.data.frame = T)
-timss_qat <- read.spss("countryfiles/bsaqatm7.sav", to.data.frame = T)
-timss_kor <- read.spss("countryfiles/bsakorm7.sav", to.data.frame = T)
-timss_twn <- read.spss("countryfiles/bsatwnm7.sav", to.data.frame = T)
+timss_fra <- read.spss("../../2. data/2.1 Raw TIMSS data/bsafram7.sav", to.data.frame = T)
+timss_eng <- read.spss("../../2. data/2.1 Raw TIMSS data/bsaengm7.sav", to.data.frame = T)
+timss_norw <- read.spss("../../2. data/2.1 Raw TIMSS data/bsanorm7.sav", to.data.frame = T)
+timss_hkg <- read.spss("../../2. data/2.1 Raw TIMSS data/bsahkgm7.sav", to.data.frame = T)
+timss_qat <- read.spss("../../2. data/2.1 Raw TIMSS data/bsaqatm7.sav", to.data.frame = T)
+timss_kor <- read.spss("../../2. data/2.1 Raw TIMSS data/bsakorm7.sav", to.data.frame = T)
+timss_twn <- read.spss("../../2. data/2.1 Raw TIMSS data/bsatwnm7.sav", to.data.frame = T)
 
 # Make list with dfs
 timss <- list(timss_fra, timss_eng, timss_hkg, timss_kor, timss_qat, timss_norw, timss_twn)
@@ -288,7 +288,7 @@ mimic.df <-left_join(timss.df.long, times.df.long)
 mimic.df$IDCNTRY <- recode(mimic.df$IDCNTRY, "250" = "FRA", "926" = "ENG", "344" = "HKG", "410" = "KOR", "578" = "NOR", "634" = "QAT", "158" = "TWN")
 
 # save df
-write.csv(mimic.df, "C:/Users/thijs/Documents/Studie/Master/MSBBSS 11 - Thesis/R-data/Master Thesis/mimic_df_raw_times.csv")
+write.csv(mimic.df, "mimic_df_raw_times.csv")
 ```
 
 
@@ -305,7 +305,7 @@ times.std <- times.df - mean.matrix
 mimic.df.stand.t <- mimic.df
 mimic.df.stand.t[,45:75] <- times.std
 
-write.csv(mimic.df.stand.t, "C:/Users/thijs/Documents/Studie/Master/MSBBSS 11 - Thesis/R-data/Master Thesis/mimic_df_standtimes.csv")
+write.csv(mimic.df.stand.t, "mimic_df_standtimes.csv")
 
 ```
 
@@ -319,27 +319,6 @@ timss.cont$cont <- ifelse(timss.cont$IDCNTRY == "FRA" | timss.cont$IDCNTRY == "E
 cont.times <- mimic.df.stand.t %>% filter(IDCNTRY != "QAT")
 cont.times$cont <- ifelse(cont.times$IDCNTRY == "FRA" | cont.times$IDCNTRY == "ENG" | cont.times$IDCNTRY == "NOR", 1, 0)
 
-write.csv(cont.times, "C:/Users/thijs/Documents/Studie/Master/MSBBSS 11 - Thesis/R-data/Master Thesis/mimic_cont_explain.csv" )
-write.csv(timss.cont, "C:/Users/thijs/Documents/Studie/Master/MSBBSS 11 - Thesis/R-data/Master Thesis/mimic_cont_detect.csv")
+write.csv(cont.times, "mimic_cont_explain.csv" )
+write.csv(timss.cont, "mimic_cont_detect.csv")
 ```
-
-
-
-```{r}
-# screen visits as process data:
-freq.df <- rbind(timss.freq.proto[[1]], timss.freq.proto[[2]], timss.freq.proto[[3]], timss.freq.proto[[4]], timss.freq.proto[[5]], timss.freq.proto[[6]], timss.freq.proto[[7]])
-
-# adjust person_id
-freq.df$person_id <- paste(freq.df$IDCNTRY, freq.df$IDSTUD, sep = "")
-freq.df <- freq.df %>% dplyr::select(-IDCNTRY)
-
-
-# Combine with other df and make numeric values of frequencies.
-mimic.freq <- join(mimic.df.stand.t, freq.df, by = "person_id")
-for(i in 80:107){
-mimic.freq[,i] <- as.numeric(mimic.freq[,i])  
-}
-
-write.csv(mimic.freq, "C:/Users/thijs/Documents/Studie/Master/MSBBSS 11 - Thesis/R-data/Master Thesis/mimic_freq_explain.csv")
-```
-
