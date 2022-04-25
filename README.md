@@ -14,8 +14,10 @@ In this folder, all data used in this project can be found. The three subfolders
 - the TIMSS data after preprocessing, used for the analyses of the thesis (2.2)\
 - the data obtained by the simulations, used for the simulation outcomes in the thesis (2.3)
 <br><br>
+<<<<<<< HEAD
 **3. Scripts:**<br>
 In this folder, all scripts can be found that are used in the analyses and pre-processing of the project. With the use of these scripts, all results can be obtained and recreated.
+
 
 
 <br><br>
