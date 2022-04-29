@@ -1,6 +1,6 @@
 # Scripts
 
-In the folders, the scripts can be found that are needed to obtain the results presented in the thesis.
+In the folders, all scripts can be found that are needed to obtain the results presented in the thesis.
 
 ### 3.1 TIMSS Preprocessing
 
