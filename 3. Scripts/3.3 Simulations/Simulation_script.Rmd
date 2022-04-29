@@ -420,3 +420,10 @@ findings.cont7 <- sim.analyse.8dif(sample.size = 2000,lat.dif = 0, strat.sd = 0,
 
 findings.cont8 <- sim.analyse.8dif(sample.size = 2000,lat.dif = 1, strat.sd = 0, seed = 548, n.iter = 100)
 ```
+
+
+```{r}
+# session information
+sessionInfo()
+```
+

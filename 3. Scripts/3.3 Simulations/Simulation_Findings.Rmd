@@ -13,7 +13,7 @@ library(MASS)
 library(tidyverse)
 
 # Data
-load("~/GitHub/Master-Thesis/2. Data/2.3 Simulated data/Simulation_outcomes.RData")
+load("../../2. Data/2.3 Simulated data/Simulation_outcomes.RData")
 ```
 
 
@@ -56,7 +56,6 @@ sum[(i/8),1] <- res
 
 mean(sum) #0.05
 
-# 0 cases of non-convergence
 ```
 
 
@@ -99,7 +98,6 @@ sum[(i/8),1] <- res
 
 mean(sum) #0.06
 
-# 0 cases of non-convergence
 ```
 
 # Outcome 14
@@ -140,8 +138,6 @@ sum[(i/8),1] <- res
 }
 
 mean(sum) #0.04
-
-# 0 cases of non-convergence
 
 ```
 
@@ -227,7 +223,6 @@ sum[(i/4),1] <- res
 
 mean(sum) #0.05
 
-# 0 cases of non-convergence
 ```
 
 
@@ -270,7 +265,6 @@ sum[(i/4),1] <- res
 
 mean(sum) #0.06
 
-# 0 cases of non-convergence
 ```
 
 
@@ -397,7 +391,6 @@ sum[(i/8),1] <- res
 
 mean(sum) #0.07
 
-# 0 cases of non-convergence
 ```
 
 # outcome 7
@@ -440,7 +433,6 @@ sum[(i/8),1] <- res
 
 mean(sum) #0.05
 
-# 0 cases of non-convergence
 ```
 
 
@@ -524,7 +516,6 @@ sum[(i/8),1] <- res
 }
 
 mean(sum) #0.06
-
 ```
 
 
@@ -566,8 +557,6 @@ sum[(i/4),1] <- res
 }
 
 mean(sum) #0.14
-
-# 7 cases of non-convergence
 ```
 
 
@@ -609,8 +598,6 @@ sum[(i/4),1] <- res
 }
 
 mean(sum) #0.1
-
-# 1 case of non-convergence
 ```
 
 # Outcome 2
@@ -651,7 +638,6 @@ sum[(i/4),1] <- res
 }
 
 mean(sum) #0.16
-
 ```
 
 
@@ -693,8 +679,6 @@ sum[(i/4),1] <- res
 }
 
 mean(sum) #0.07
-
-# 2 non-convergence
 ```
 
 
@@ -738,8 +722,6 @@ sum[(i/4),1] <- res
 }
 
 mean(sum) #0.02
-
-# 5 cases of non-convergence
 ```
 
 
@@ -783,8 +765,6 @@ sum[(i/4),1] <- res
 }
 
 mean(sum) #0.05
-
-# 6 cases of non-convergence
 ```
 
 
@@ -825,8 +805,6 @@ sum[(i/8),1] <- res
 }
 
 mean(sum) #0.06
-
-# 2 cases of non-convergence
 ```
 
 
@@ -867,8 +845,6 @@ sum[(i/8),1] <- res
 }
 
 mean(sum) #0.00
-
-# 6 cases of non-convergence
 ```
 
 ```{r control 5}
@@ -908,8 +884,6 @@ sum[(i/4),1] <- res
 }
 
 mean(sum) #0.03
-
-# 6 cases of non-convergence
 ```
 
 
@@ -950,8 +924,6 @@ sum[(i/4),1] <- res
 }
 
 mean(sum) #0.02
-
-# 2 cases of non-convergence
 ```
 
 ```{r control 7}
@@ -991,8 +963,6 @@ sum[(i/8),1] <- res
 }
 
 mean(sum) #0.01
-
-# 9 cases of non-convergence
 ```
 
 
@@ -1032,10 +1002,12 @@ sum[(i/8),1] <- res
 }
 
 mean(sum) #0.02
-
-# 1 case of non-convergence
 ```
 
 
+```{r}
+# Session information
+sessionInfo()
+```
 
 

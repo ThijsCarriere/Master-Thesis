@@ -32,7 +32,7 @@ The data sets of the different countries are loaded in.
 
 ```{r warning = FALSE, message = FALSE}
 
-# Data of some countries, need to select countries with electronic assessment -> countries with 218 columns after cleaning. 
+# Loading in data of used countries 
 timss_fra <- read.spss("../../2. data/2.1 Raw TIMSS data/bsafram7.sav", to.data.frame = T)
 timss_eng <- read.spss("../../2. data/2.1 Raw TIMSS data/bsaengm7.sav", to.data.frame = T)
 timss_norw <- read.spss("../../2. data/2.1 Raw TIMSS data/bsanorm7.sav", to.data.frame = T)
@@ -193,7 +193,6 @@ add_response_data(timss.db, dexter.timss)
 
 # Tia table
 tia_tables(timss.db)
-
 tia_tables(timss.db, )
 ```
 
@@ -255,7 +254,7 @@ test.df %>%
 head(timss.df)
 ```
 
-
+### 10. Saving data sets
 
 ```{r}
 # Making country dummies
@@ -287,7 +286,7 @@ mimic.df <-left_join(timss.df.long, times.df.long)
 # countries as names
 mimic.df$IDCNTRY <- recode(mimic.df$IDCNTRY, "250" = "FRA", "926" = "ENG", "344" = "HKG", "410" = "KOR", "578" = "NOR", "634" = "QAT", "158" = "TWN")
 
-# save df
+# save df with raw response times
 write.csv(mimic.df, "mimic_df_raw_times.csv")
 ```
 
@@ -305,6 +304,7 @@ times.std <- times.df - mean.matrix
 mimic.df.stand.t <- mimic.df
 mimic.df.stand.t[,45:75] <- times.std
 
+# Save df with centered response times
 write.csv(mimic.df.stand.t, "mimic_df_standtimes.csv")
 
 ```
@@ -319,6 +319,16 @@ timss.cont$cont <- ifelse(timss.cont$IDCNTRY == "FRA" | timss.cont$IDCNTRY == "E
 cont.times <- mimic.df.stand.t %>% filter(IDCNTRY != "QAT")
 cont.times$cont <- ifelse(cont.times$IDCNTRY == "FRA" | cont.times$IDCNTRY == "ENG" | cont.times$IDCNTRY == "NOR", 1, 0)
 
+# Save df for optional analyses with continents
 write.csv(cont.times, "mimic_cont_explain.csv" )
 write.csv(timss.cont, "mimic_cont_detect.csv")
 ```
+
+
+### 11. Session information
+
+```{r}
+# Sessioninfo
+sessionInfo()
+```
+

@@ -1,0 +1,392 @@
+---
+title: "Explanation of DIF"
+author: "Thijs Carriere"
+date: "25-2-2022"
+output: html_document
+---
+
+
+```{r message=FALSE, warning=FALSE}
+# Packages
+library(tidyverse)
+library(lavaan)
+
+# Loading the data
+mimic.df.stand.t <- as.data.frame(read.csv("../../2. Data/2.2 Preprocessed data/mimic_df_standtimes.csv"))
+mimic.df.stand.t <- mimic.df.stand.t[,-1]
+```
+
+
+## Explanation of DIF on country level
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209;
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn;
+ME52024 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52024t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52058A ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52058At
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52058B ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52058Bt
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52125 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52125t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52229 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52229t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52063 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52063t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52072 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52072t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52146A ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52146At
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52146B ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52146Bt
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52092 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52092t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52046 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52046t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52083 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52083t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52082 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52082t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52161 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52161t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52418A ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52418At
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME52418B ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME52418Bt
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72007 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72007t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72025 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72025t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72017 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72017t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72190 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72190t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72068 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72068t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72076 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72076t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72056 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72056t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72098 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72098t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72103 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72103t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72121 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72121t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72180 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72180t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72198 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72198t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72227 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72227t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72170 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72170t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+timss.cou.mod <- 'lat =~ ME52024 + ME52058A + ME52058B + ME52125 + ME52229 + ME52063 + ME52072 + ME52146A + ME52146B + ME52092 + ME52046 + ME52083 + ME52082 + ME52161 + ME52418A + ME52418B + ME72007 + ME72025 + ME72017 + ME72190 + ME72068 + ME72076 + ME72056 + ME72098 + ME72103 + ME72121 + ME72180 + ME72198 + ME72227 + ME72170+ ME72209
+lat ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn
+ME72209 ~ dum.fr + dum.eng + dum.hk + dum.kor + dum.qat + dum.nor + dum.twn + ME72209t
+'
+
+res.mod <- sem(timss.cou.mod, data = mimic.df.stand.t, ordered = colnames(mimic.df.stand.t[,14:44]))
+
+summary(res.mod)
+```
+
+
+```{r}
+sessionInfo()
+```
+
+
