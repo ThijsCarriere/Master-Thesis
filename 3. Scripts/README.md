@@ -9,7 +9,7 @@ The script in this folder is used to process the raw TIMSS data to the format th
 ### 3.2 TIMSS analyses
 
 In this folder, the scripts for the DIF detection and DIF explanation of the TIMSS data can be found. The `html` files are the results of these scripts (dif_detection_timss.Rmd and dif_explanation_timss.Rmd), and the numbers of these documents are used in as the findings in the thesis (Table 5 and Table 6). 
-The descriptive analyses are run in the script ''. The results of these analyses are used in the thesis for Table 3, Table 4, Figure 3, and Figure 4.
+The descriptive analyses are run with the script 'descriptives_timss.R'. The results of these analyses are used in the thesis for Table 3, Table 4, Figure 3, and Figure 4.
 All input files for these scripts can be found in folder 2.2.
 
 ### 3.3 Simulations
