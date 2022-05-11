@@ -1,0 +1,452 @@
+% Documenttype
+\documentclass{interact}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[backend=biber, style=apa, sorting=nyt, natbib]{biblatex}
+\addbibresource{ReRep_bibliography.bib}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{tablefootnote}
+\usepackage{ragged2e}
+\usepackage{pdflscape}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+\usepackage{subcaption}
+\captionsetup{justification=raggedright, singlelinecheck=false}
+\usepackage{dirtytalk} % for quote marks
+\usepackage{setspace} % for spacing
+\onehalfspacing
+\renewcommand{\arraystretch}{1.25}
+
+
+\begin{document}
+
+\title{Using Process Data in the Detection and Explanation of Differential Item Functioning}
+
+\author{\name{Thijs C. Carrière\textsuperscript{a}}
+\afill{\textsuperscript{a}Utrecht University, the Netherlands}}
+
+\maketitle
+
+\begin{abstract}
+    Differential Item Functioning (DIF) is a broadly studied property of test items. DIF can be an unwanted form of bias, but can also indicate a meaningful difference. To distinguish between the two, the source of the DIF needs to be explained. With the growth of computerized testing, process data have become more widely available. Process data are data that are collected during the response process but are not the response itself, such as response times. These data might hold additional information that is not captured in the response itself, and might therefore be useful in explaining DIF. In this study, a new model based on the MIMIC model is suggested that can be used to investigate whether DIF can be explained with process data. The model is first tested with simulations, where the sample size, strength of the DIF, latent differences between groups, and the number of DIF items are altered. Next, the model is applied to empirical Trends in International Mathematics and Science Study (TIMSS) data to see whether DIF in TIMSS can be explained with response times. Based on the findings it is discussed how the proposed model can be used to explain DIF with process data, but that the current state of process data might form a hindrance for wider use. Further research with a wider variety of process data is recommended.
+\end{abstract}
+
+\begin{keywords}
+Differential Item Functioning; Process data; Response times; MIMIC; TIMSS
+\end{keywords}
+
+
+\section{Introduction}
+Over the last decades, educational assessment is transitioning from paper-based assessment (PBA) to computer-based assessment (CBA) \parencite{burkhardt2003computer}. More recently, international large-scale assessments (ILSAs) started using more and more of the full possibilities of digital assessment, gaining access to a new type of data additional to response data: process data. Process data are data that are collected during the process leading to the response, such as response time, number of clicks or whether an optional help tool is used \parencite{molenaar2015value, wools2019validity}. Process data could consequently be useful in creating more understanding of the process leading to a response of a student \parencite{han2021sequential}, which can hold didactically important information \parencite{wools2019validity} and could allow for improved measurements of tests \parencite{molenaar2015value, zhang2021accurate}.
+
+Currently, measurement models occasionally include process data. This is the case for example for response times, which are a popular and commonly collected type of process data \parencite{molenaar2015generalized}. Response times are assumed to contain information about the latent trait measured that is not covered by the responses itself. Several psychometric measurement models have been developed to include both responses and response times in one model \parencite{molenaar2015generalized, van2007hierarchical, entink2009statistical}.
+
+The rise of CBA also opens the possibility for more complex test items, such as technology enhanced items (TEIs). TEIs are test items that make use of the (digital) assessment platform itself by including aspects of technology such as media, interactivity, or response methods that go beyond traditional assessment methods \parencite{Commissionguide, bryant2017developing}. TEIs make the collection of more and newer process data possible, such as the order in which sub-questions are answered or whether a certain strategy was used for getting to the response. With both response times and newer types of process data however, the use and correct way of analyzing these data are not always clear \parencite{qiao2018data, von2019developments, tang2021exploratory}. 
+
+One test property that is important for both traditional test items and TEIs is that probabilities of giving a correct response on an item should be stable over groups, given an equal level of a latent trait. When groups have unequal probabilities of responding correctly on a test item, despite an equal score on the latent trait intended to be measured, the test item is subject to Differential Item Functioning (DIF; \cite{hambleton1989detecting}). DIF can either indicate a meaningful difference between groups or an unwanted nuisance factor \parencite{ercikan2002disentangling, kalayciouglu2011differential}. To distinguish between these two, it is important that the source of the DIF can be explained. An example of when DIF can be explained and forms a meaningful difference could be the case when one group is more proficient on a subtopic of a test than another group because of policy choices that differ over the groups. In that case, the probability of a respondent answering items related to this subtopic correctly might be higher while the overall proficiency scores are equal, but a fair comparison can still be made between the groups. However, when DIF forms a nuisance factor the DIF items would be biased and cannot be used to compare groups fairly. These items should either be deleted from the test or should be changed so the bias disappears \parencite{hagquist2019explaining}. When items are deleted because of DIF, the test loses part of the measurement quality, validity and reliability \parencite{hambleton2006good}. Adjusting test items and item parameters to deal with DIF is therefore preferred, so the test stays intact. However, these adjustments need to be made carefully, in order to not introduce additional bias. When DIF cannot be explained, it is unclear whether the DIF is unwanted. Therefore, entanglement of DIF sources is important to ensure fair comparisons \parencite{sireci2013decisions}. In ILSAs, the groups compared on average proficiency level are often countries and important policies are based on these outcomes. Therefore, DIF detection and explanation form important steps of the analyses of these studies. Biased items must be identified and dealt with to ensure valid comparisons.
+
+The domain of DIF has been studied extensively \parencite{zumbo1999handbook, zumbo2007three} and multiple techniques to identify items with DIF have been developed \parencite{bechger2015statistical, gao2019comparison, mellenbergh1989item}. All these methods are based on investigating the relation between group membership and response probability conditional on the measured latent trait. However, all current detection techniques do not distinguish between meaningful DIF and DIF as undesired bias. One way to explain DIF is by including covariates on the person or group level that can explain the difference in response probability \parencite{choi2014dif, hagquist2019explaining}. This way of explaining DIF is in line with the way \textcite{ackerman1992didactic} sees DIF. He states that DIF is the problem of measuring additional latent traits beside the one intended to measure. Process data might contain information on these additional traits. For example, response times might correlate with reading ability in a mathematical test item. Process data might therefore be useful in the explanation of DIF, and a new use for process data might be found in making a distinction between useful DIF and DIF as bias.
+
+The current study will address the link between process data and DIF, which to the best of our knowledge has not been studied yet. The objective is to investigate the possible use of process data in making the distinction between meaningful DIF and DIF as a form of bias. This will be studied based on the research question \say{\textit{To what extend can process data be used in the explanation and detection of Differential Item Functioning?}}. Since no earlier studies have explained DIF with process data, a new method needs to be developed in order to answer the research question. This will be done within this study. The research question will be studied with the use of the data of the ILSA \textit{Trends in International Mathematics and Science Study} (TIMSS; \cite{TIMSS}). It is important to note that before DIF can be explained, it must be detected first. Therefore, DIF detection will be executed on the TIMSS test items before process data is used to explain the DIF. In the past, DIF has already be found in ILSA test items \parencite{ozdemir2015comparison, choi2014dif, avcsar2021cross, feskens2019differential}, and it is therefore expected that some of the TIMSS items will be subject to DIF as well. Since covariates have been used to explain DIF in the past, process data are expected to function in a similar way and it is expected that process data will indeed explain detected DIF to a certain extent.
+
+The outline of this paper will be as follows:
+In section \ref{sec: 2 models} models on DIF detection and process data modeling will be discussed. The MIMIC model will be central, since it is the DIF detection technique used in this study. Based on the discussed models, a new model is proposed that can be used to model process data as an explanation for DIF. In sections \ref{sec: 3 methods} and \ref{sec: 4 results}, the proposed model is evaluated with the use of simulated data. Additionally, to see if DIF in TIMSS can be explained with process data, and to evaluate the use of the model on an empirical example, the proposed model is used on TIMSS data. We will discuss the implications of the findings in the discussion.
+
+\section{Models for DIF and process data}
+\label{sec: 2 models}
+In order to investigate process data as an explanation for DIF, a new method needs to be developed. Such a method should be based on current DIF detection frameworks, so explanation can be done in a same model as the detection. Furthermore, the way of modeling the relation between process data and responses should be considered when developing a new method. Several measurement models that model these relations already exist. In this section, both DIF detection techniques and measurement models are discussed before a new model is proposed that can be used to investigate process data as an explanation for DIF.
+
+\subsection{Models for detection of DIF}
+As mentioned earlier, a wide variety of methods for detection of DIF exists, where each method has advantages and disadvantages over other detection methods \parencite{gao2019comparison}. For example, methods differ on the number of groups they can compare and the types of DIF that they can detect (uniform DIF and non-uniform DIF; \cite{mellenbergh1983conditional}). A consideration must be made in what features of DIF detection are important in the current study to determine what DIF detection method is most suitable to use. Since ILSAs often compare multiple countries, it is desirable to have a detection method that can handle more than two groups simultaneously. Examples of DIF detection methods that can only compare two groups at the time are the Mantel Heanszel procedure \parencite{mantel1959statistical}, the logistic regression procedure \parencite{swaminathan1990detecting}, and Lord's Chi-square test \parencite{lord1977study, lord1980study}. Examples of detection methods that can compare multiple groups on the other hand, are the MIMIC model \parencite{joreskog1975estimation}, the Generalized Mantal Haenszel procedure \parencite{landis1978average, penfield2001assessing}, and Bayesian approximate measurement invariance testing \parencite{muthen2013bsem, van2013facing}. Additionally, since the DIF needs to be explained, a model in which process data can be added is preferred. Of the mentioned techniques above, the MIMIC model is one that can incorporate covariates to explain DIF \parencite{woods2009evaluation, chun2014using}. Because of these two requirements it is decided to use the MIMIC model for the detection of DIF within this study. Although we chose for the MIMIC model, other frameworks, such as Bayesian approximate measurement invariance testing, could have been used in this study as well.
+
+\subsection{The MIMIC model}
+Multiple Indicators Multiple Causes models (MIMIC; \cite{joreskog1975estimation}) are a form of structural equation models (SEM) that can be used to detect DIF. In these models, a number of items ($i$) are loading on a latent variable ($\theta$). The latent variable is then regressed a grouping variable ($z$). Lastly, the item under investigation for DIF is regressed on the grouping variable. This model can be written as:
+\begin{equation}
+    y^*_i = \lambda_i \theta + \beta_i\gamma z + \beta_i z + \epsilon_i.
+\end{equation}
+    
+Here, $y_i^*$ is the underlying latent variable for the response on item $i$ \parencite{wirth2007item}. $\lambda_i$ is the factor loading of item $i$ on the latent variable $\theta$, which is analogous to the discrimination parameter used in IRT models \parencite{bulut2017detecting}, $z$ is the grouping variable, $\beta_i$ is the regression coefficient from item $i$ on grouping variable $z$, and $\gamma$ is the regression coefficient from the regression of the latent variable on grouping variable $z$, indicating the mean differences between groups on the latent trait. Lastly, $\epsilon_i$ is the random error for item $i$. A general assumption of the MIMIC model is that the variance of $\theta$, $\zeta$, is equal over the different groups under investigation. This assumption is taken as given within this study. The investigated item $i$ is subjected to DIF when $\beta_i \neq 0$. As explained by \textcite{wirth2007item}, the latent underlying variable $y_i^*$ is a normal continuous variable and its response category (c) in item $i$ is determined based on threshold $\tau$, where 
+
+\begin{equation}
+    y_{ij} = c \mbox{  if  } \tau_{jc} \le y^*_{ij} < \tau_{jc+1}.
+\end{equation}
+\hspace{.5cm}
+
+In this basic MIMIC model, grouping variable $z$ shows the case where two groups are compared. If more than two groups are compared, multiple grouping variables $z$ should be added to the model, following dummy coded groups. Figure 1 shows a MIMIC model with $n$ groups. Furthermore, this MIMIC model can be used to investigate DIF in multiple test items at the same time, by estimating multiple $\beta$-parameters. However, this can not be done for all test items at the same time. At least one anchor item needs to be identified where the $\beta$-parameter is set to 0 and is not estimated.  
+
+The basic MIMIC model has received several additions over the years. Features added to the MIMIC model are the ability to detect DIF over more than two groups \parencite{dell2021investigating} and the possibility to add covariates to the model to account for DIF \parencite{chun2014using, woods2009evaluation}. So far these covariates have often been on person level, such as gender or Socio Economic Status \parencite{chun2014using}. Using covariates on item level, such as process data is uncommon. 
+
+Another addition to the MIMIC model is its ability to detect both uniform and non-uniform DIF, in comparison to the original MIMIC model that only can detect uniform DIF \parencite{woods2011testing}. A test item has uniform DIF when the difference in the logit of the probability of giving a correct answer is constant over the latent trait. On the other hand, an item is subject to non-uniform DIF when there is an interaction between group membership and the latent ability. For example, when one group has a higher probability of answering an item correctly when having a low score on the latent ability, while the other group has a higher probability of answering correctly when having a high score on the latent ability, the item has non-uniform DIF \parencite{guler2009comparison}. The MIMIC model that is able to detect both non-uniform and uniform DIF can be written as:
+
+\begin{equation}
+    y_i^* = \lambda_i \theta + \beta_i\gamma z + \beta_i z + \omega_i \theta z + \epsilon_i.
+\end{equation}
+
+
+Here, $\omega_i$ is the regression coefficient from interaction term $\theta z$ between grouping variable $z$ and latent trait ($\theta$) on item $i$, and the other terms are equal to equation 1. The investigated item has non-uniform DIF when $\omega_i \neq 0$. The MIMIC model that both detects uniform and non-uniform DIF is shown in Figure \ref{fig:model1}.
+
+\begin{figure}[H]
+    \centering
+    \captionsetup{justification = centering, margin = 1cm}
+    \includegraphics[scale = .85]{{mimicmodel.jpg}}
+    \caption{\textit{MIMIC model to investigate uniform and non-uniform DIF. In this model, DIF is checked for item 3. Dashed arrows indicate regression.} \vspace{.5cm}}
+    \label{fig:model1}
+\end{figure}
+
+\subsection{Models on response and response time}
+In the past, various models have been developed that combine both information on the response and response times in their estimation of the latent trait, using the additional information that response time can hold about the measured trait \parencite{van2007hierarchical, entink2009statistical, molenaar2015generalized}. Van der Linden (2007) gives a summary of some models and develops his own hierarchical framework to model both responses and log-response times. In this framework, for test taker $j$ taking a test both a vector of responses ($\textbf{U}_j$) and a vector of log-response times ($\textbf{T}_j$) are obtained. These vectors lead to separate latent variables for the responses ($\theta_j$) and for the response times ($\tau_j$). On a second level of the framework, the two latent variables are modeled jointly on a population level. 
+
+\textcite{molenaar2015generalized} developed a frequentist adaptation of the framework by Van der Linden which is referred to as the bivariate generalized linear item response theory framework (B-GLIRT framework). Here as well, $\theta_j$ and $\tau_j$ are latent variables for the responses and response times respectively, forming a two factor model. The two factors are then linked by cross-relations, which can take multiple forms. Like \textcite{van2007hierarchical}, this framework models log-response times. This frequentist framework has several advantages \parencite{molenaar2015generalized}: it allows for common used models to be used in this framework, and multilevel structures can be modeled easily, which is desirable for educational data that often has a multilevel structure. In addition, the framework allows for covariates to be modeled as well, since it is a form of SEM modeling. This last advantage is especially useful in this study. Therefore, when response times are modeled in this study, the B-GLIRT framework is used.
+
+\subsection{A new model for DIF and process data}
+\label{sec: newmodel}
+As explained, a new method to explain DIF with process data needs to be based on both DIF detection techniques and measurement models. In this study a model is proposed that adds process data to a standard MIMIC model in the form of a item-level covariate. Within the model, the item flagged with DIF is regressed on both the grouping variable and the process data of that specific test item. Since the model tries to explain DIF with individual difference on item level, possible differences on group level should be accounted for. This can be accounted for in two different ways. The first way is to regress the process data on the grouping variable. Adding this relation accounts for any group level differences in process data. The other way is by centering the process data on person means. In this study, the method of person-mean centering is used.
+
+DIF is (partly) explained by the process data if the regression of item on the process data is significant, and the $\beta$-parameters and $\omega$-parameters become non-significant, compared to the MIMIC model where DIF for the item was detected. The proposed model is shown in Figure \ref{fig:model2}. In this figure, the method to account for group-level difference by regressing the process data on the grouping variables is shown.
+
+Since the proposed new model is based on measurement models specifically developed for response times, this study will be limited to the use of response times as process data. However, the model can be used for other process data as well, sometimes with little adjustments to apply measurement models for other types of process data.
+
+\begin{figure}[H]
+    \centering
+    \captionsetup{justification = centering, margin = 1cm}
+    \includegraphics[scale = .85]{{mimic_cov.jpg}}
+    \caption{\textit{Process data of item 3 as a covariate ($x_3$) added to the MIMIC model, explaining the DIF in item 3. Dashed arrows indicate regression.}}
+    \label{fig:model2}
+\end{figure}
+
+\section{Methods}
+\label{sec: 3 methods}
+
+\subsection{Simulations}
+In order to form a better understanding of the functioning of the proposed model and to see how often DIF is correctly explained, the proposed model is tested on simulated data. Following the standard TIMSS analyses, no distinction is made between uniform and non-uniform DIF in the detection, and the factors detecting this difference, $\theta z$, are not included in the model. In the official analyses of TIMSS, higher level IRT models are used, but no distinction is made between uniform and non-uniform DIF \parencite{von2019timss}. Within all simulations within this study, log-response times are used as process data.
+
+The simulated data follows the situation where two groups made a test of 30 test items. The number of items in the test is based on the number of items used in TIMSS booklets. For each item, a response and a response time are generated for each observation. The responses, 1 for correct and 0 for incorrect, are obtained by a binomial distribution, where the probability parameters are obtained by a 2PL IRT-model \parencite{birnbaum1968some}. The 2PL model can be written as
+\begin{equation}
+    P(X_{i} = 1|\theta, a_i, b_i) = \frac{e^{a_i(\theta) - b_i}}{1 + e^{a_i(\theta) - b_i}},
+\end{equation}
+where the formula gives the probability for a correct response on item $i$. $\theta$ is the latent ability score of the student, and $b_i$ and $a_i$ are the difficulty and discrimination parameter of item $i$, respectively. For each simulation the $b$-parameters are sampled from a standard normal distribution, and the $a$-parameters are sampled from a uniform distribution ranging from 1 to 3. 
+
+The response times are simulated following \textcite{van2007hierarchical}, using a normal linear homoscedastic factor model. This model can be written as 
+\begin{equation}
+    ln(T_{pi}) = \lambda_i - \tau_p + \epsilon_{pi}.
+\end{equation}
+Here $ln(T_{pi})$ is the log-response time for person $p$ on item $i$, $\lambda_i$ is an item specific intercept for item $i$, and $\epsilon_{pi}$ is the random error with VAR$(\epsilon_{pi}) = \sigma_{pi}$. Lastly, $\tau_p$ is a person specific latent variable underlying the response times. Having a higher latent response-time variable results in faster response times. 
+
+Following \textcite{molenaar2018response}, the latent ability variable $\theta$ and the latent response time variable $\tau$ are correlated with $r = .4$, indicating that people with faster responses tend to have a higher latent ability and thus more correct answers. Both the latent variables are obtained with the use of a multivariate normal distribution, $\mathcal{N} \sim (\boldsymbol{\mu_g}, \boldsymbol{\Sigma})$. Here, $\boldsymbol{\Sigma}$ is a covariance matrix that represents the correlation of .4 between the latent variables, and $\boldsymbol{\mu_g}$ represents the group means on both variables. These group means may differ between groups but are the same for both variables within one group.
+
+A number of the items is subject to DIF, introduced by a strategy factor. This strategy factor, $\delta_p$, is drawn from a separate normal distribution for each DIF item, $\delta_p \sim \mathcal{N}(\mu_{stg}, 1)$. Here $\mu_{stg}$ differs over the two groups, resulting in an easier item for one of the two groups. With the strategy factor included, equation 6 follows from equation 4 and can be written as
+\begin{equation}
+   P(X_{i} = 1|\theta, a_i, b_i) = \frac{e^{a_i(\theta) - b_i + \delta_p}}{1 + e^{a_i(\theta) - b_i + \delta_p}}, 
+\end{equation}
+where $\delta_p$ is the strategy factor for person p. For one of these items, the strategy factor also influences the corresponding response times. This means that the DIF for this particular item can be explained by the response times, whereas for the other DIF items this is not the case. With this factor included, equation 7 describes how the strategy factor is added to the response times. The equation follows from equation 5 with the inclusion of $\delta_p$, and can be written as
+\begin{equation}
+    ln(T_{pi}) = \lambda_i - \tau_p + \epsilon_{pi} + \delta_p.
+\end{equation}
+
+\subsubsection{Conditions}
+The model is evaluated in different conditions. Four variables are changed over the conditions, following a 2x2x2x3 model. This results in 24 conditions, that are summarised in Tables \ref{tab:sim_500} and \ref{tab:sim_2000}.
+
+Firstly, the sample size is set to 500 and 2,000 observations per group. Secondly, the number of items with DIF is altered. There is always only one test item where DIF is present that can be correctly explained by response times. However, several extra items are modeled to have DIF as well. In one condition four items in total are subject to DIF and in the other condition eight items are subject to DIF. Third, the difference between the two test groups on the latent traits (for both the response and the response times) differs over the conditions. This difference is captured with parameter $\mu_g$. In one condition, it is set to 0 for both groups. In the second condition it is set to 0 for the first group, but to 1 for the second group, indicating 1 standard deviation difference on the latent traits. Lastly, the strength of the strategy factor, and therefore the strength of the DIF, differs over the conditions. This parameter, $\mu_{stg}$, is set to 0, .5, and 1 for one group, and set to 0 in all conditions for the other group. This illustrates the cases of no DIF, weaker DIF, and stronger DIF, respectively. The first condition functions as a control condition.
+
+For each condition we run 100 iterations. In each iteration, first a normal MIMIC model is run to see if the correct items are detected as having DIF. Second, the proposed model is run and it is investigated whether the DIF correctly disappears in the one item where response times should explain the DIF. For both steps, an $\alpha$ of .05 is used. To account for general group differences in response times, the response times are person mean centered. The person means are calculated with the exclusion of the item that is under investigation for DIF, in this case the item where the DIF can be explained. This choice and method follows from the subsection \ref{sec: newmodel}.
+
+As outcome summary statistics, it is indicated in how many of the iterations DIF is detected and in how many of the cases DIF is detected and also explained. Here, only the result of the item that has DIF that can be explained by the reaction times is considered, and the outcome of the other DIF items is not taken into account. Relative explanation rates are also calculated. This is the percentage of models in which DIF is explained when only the models are taken into account where DIF was detected in the first place. The outcomes give an indication of the power of the proposed model. Iterations with non-converged models are excluded in the calculations.
+
+\subsection{Empirical Data}
+\subsubsection{TIMSS Data}
+The data used in this study are data collected in the 2019 iteration of the TIMSS  \parencite{TIMSS}. These data are publicly available\footnote[1]{The TIMSS data can be obtained from \url{https://www.iea.nl/index.php/data-tools/repository/timss}}. TIMSS is an ILSA that investigates the mathematics and science knowledge of 4th and 8th graders since 1995 in cycles of four years. Both mathematics and science are measured by multiple choice and open ended items, where each test version is consisting of 24 to 36 items per domain \parencite{mullis2017timss}. In addition to mapping proficiency in mathematics and science, a number of surveys are conducted on school, student and teacher level to collect contextual information.
+
+In the TIMSS assessment of 2019, 58 countries participated resulting in over 230,000 students per grade being assessed world wide \parencite{martin2020methods}. Since 2019, participating countries have the choice to administer TIMSS by computer (eTIMSS) or still opt for the PBA. During the assessment of eTIMSS, process data are gathered for the students.
+
+Within TIMSS several test versions (so called booklets) are used. The main reason for using different test versions is to limit the number of items that each student has to answer, while maintaining a full coverage of the complete mathematics and science domain. Within this study we make use of the mathematics items of the first TIMSS booklet for grade 8. The mathematics items are chosen over the science items because mathematical questions have more diverse answer processes that could result in meaningful DIF. The responses of seven eTIMSS countries are compared to identify test items that are subject to DIF. The countries used are England, France, Hong Kong, Korea, Norway, Qatar, and Taiwan, resulting in 1,951 observations. These countries are selected because they have relatively different educational systems \parencite{hofstede1986cultural}. These differences can result in meaningful DIF, which could then be explained by process data.
+
+For the analyses to explain DIF with process data, we use the response times collected in eTIMSS. Process data in eTIMSS are available for every student-item interaction. In eTIMSS response times are measured in seconds. 
+
+\subsubsection{Pre-processing of data}
+Before the data were in a feasible format for the analyses, several steps were taken. Firstly, the data of the different countries were taken together as one data set. New person identifiers were created by combining the identifier for country and student, since student identifiers were not unique over countries. Then, scores were computed based on the given answers. A score of 0 was given for a false or missing answer and 1 for a correct answer. For questions existing of multiple sub questions, one combined score was given. Response times were then converted to a compatible format to the response data. For the last item of the test, unrealistically high response times were found. They were replaced with a capped value of 400 seconds. Lastly, the data were put in a format fit to be put in a Dexter database to make the data easier accessible and make analyses possible \parencite{maris2018dexter}. 
+
+\subsubsection{Detection of DIF}
+The first step of the analyses is the detection of DIF items. This detection will be done with the use of a MIMIC model, where for each item is investigated whether it has DIF over the seven countries. A test item is classified as having DIF when the DIF model fits significantly better than the base model (the model without an item regressed on the group variable). This is checked with a $\chi^2$-difference test, where an $\alpha$ of .05 is used. A Bonferroni correction is applied to the p-values to prevent capitalization on chance, since the analysis is run for each item separately (31 times in total). When DIF is found in an item, it is investigated for what countries this is the case by looking at what $\beta$-parameters differ significantly from 0.
+
+\subsubsection{Modeling process data}
+In order to answer the research question with empirical data, response times are modeled for each of the test items found to be subject to DIF. In accordance with the model and the simulations, the response times were person-mean centered. Again, the person means were calculated with the exclusion of the item under investigation. Therefore, modeling of the process data follows the proposed model used in the simulation study as described in the subsection \ref{sec: newmodel}. For each item it is investigated if $\beta$-parameters that were significant in the detection of DIF have become non-significant. If this is the case, the DIF is (partly) explained by the process data. 
+
+\subsection{Software and Ethics}
+All of the analyses will be performed with R \parencite{Rsoftware} in RStudio, version 2021.9.0.351 \parencite{Rstudio}. All structural equation models are run with the lavaan package, version 0.6.10 \parencite{rosseel2012lavaan}. The scripts for all analyses can be found on the public GitHub\footnote[2]{The public GitHub page for this project can be found at \url{https://github.com/ThijsCarriere/Master-Thesis}} of this project. Ethical approval for this study was obtained through the FETC of Utrecht University. 
+
+\section{Results}
+\label{sec: 4 results}
+\subsection{Simulation outcomes}
+The summarized outcomes of the simulations can be found in Table \ref{tab:sim_500} ($n = 500$) and Table \ref{tab:sim_2000} ($n = 2,000$). When looking at the strength of DIF, Table \ref{tab:sim_500} and Table \ref{tab:sim_2000} show that detection is best with strong DIF. However, in cases of a smaller sample size, the detection of strong DIF drops compared to cases with a high sample size (.54 to .81 and .98 to .99, respectively). For weaker DIF, the detection rates are lower for both cases with a high sample size and cases with a smaller sample size (.59 to .81 and .18 to .27, respectively). The drop in DIF detection because of the sample size is stronger for the conditions with weaker DIF compared to the conditions with stronger DIF, indicating an interaction between sample size and strength of DIF regarding the detection of DIF. For the difference in latent ability, there seems a small effect where there is a higher detection rate in cases with no latent difference between the groups. This effect is not clearly present however and could be further investigated. Lastly, the number of DIF items does not seem to have an effect on the DIF detection rates.
+
+Considering the rates of both correct detection and explanation of the DIF-item, sample size shows an effect, with relative explanation ranging from .831 to .929 and from .700 to .947 for conditions with a high sample size and conditions with a smaller sample size, respectively. There is an interaction between sample size and DIF strength when looking at the explanation rates. For the conditions with stronger DIF, sample size does not influence the explanation rates. For weaker DIF however, relative explanation rates drop when comparing the smaller sample size to the higher sample size. The number of DIF-items does not play a role in the explanation rates. This might however be different when the outcome of more than one item is considered. The rates of correct decisions for all the items would probably be lower in that case. The difference in latent ability does not have an effect on the explanation of DIF either. 
+
+All the effects on the explanation of DIF are also visible in the absolute explanation rates. They are clearer in the relative explanation rates however, since they take the DIF-detection rates into account. These relative explanation rates are also more relevant, since DIF detection will always be executed first before DIF will be explained and explanation will only happen for cases where DIF is detected.
+
+The conditions without DIF function as expected. The DIF detection rates range from .01 to .07 and are around the set $\alpha$ of .05. The rates of both detection and explanation are even lower, ranging from .00 to .02. The DIF is thus still explained in some of these cases, and has higher relative explanation rates than expected. This is because in these simulations the strategy still influences both the outcome and the response time. The groups do not differ on their average strategy factor, but faster response times are still related to better outcomes, explaining the significant explanations in the model when DIF is incorrectly identified. None of the run models showed non-convergence.
+
+\begin{landscape}
+\pagestyle{empty}
+\begin{table}[p]
+
+\caption{\label{tab:sim_500}\\ Simulation conditions and simulation outcomes in percentages of correct outcomes per condition, sample size = 500.}
+\begin{tabular}{c| c c c | c c c c}
+\hline
+\hline
+     & Number of & Ability difference & DIF strength &  & DIF-detected & Time and & Relative\\
+    Condition & DIF-items & (SD) & (SD) & DIF-detected & and explained & DIF significant & explanation-rate\\
+    \hline
+    1 & 4 & 0 & 0 & .03 & .01 & .02 & .333 \\
+    2 & 4 & 0 & .5 & .27 & .23 & .04 & .852 \\
+    3 & 4 & 0 & 1 & .81 & .74 & .07 & .914 \\
+    4 & 4 & 1 & 0 & .07 & .02 & .05 & .286 \\
+    5 & 4 & 1 & .5 & .20 & .14 & .06 & .700\\
+    6 & 4 & 1 & 1 & .68 & .63 & .05 & .926 \\
+    7 & 8 & 0 & 0 & .07 & .01 & .06 & .143 \\
+    8 & 8 & 0 & .5 & .18 & .13 & .05 & .722 \\
+    9 & 8 & 0 & 1 & .76 & .72 & .04 & .947 \\
+    10 & 8 & 1 & 0 & .02 & .02 & .00 & 1\\
+    11 & 8 & 1 & .5 & .22 & .16 & .06 & .727 \\
+    12 & 8 & 1 & 1 & .54 & .49 & .05 & .907 \\
+    \hline
+    \hline
+\end{tabular}
+
+\end{table} 
+
+\end{landscape}
+\pagestyle{plain}
+\begin{landscape}
+
+\pagestyle{empty}
+\begin{table}[p]
+
+\caption{\label{tab:sim_2000}\\ Simulation conditions and simulation outcomes in percentages of correct outcomes per condition, sample size = 2,000.}
+\begin{tabular}{c| c c c | c c c c}
+\hline
+\hline
+     & Number of & Ability difference & DIF strength &  & DIF-detected & Time and & Relative\\
+    Condition & DIF-items & (SD) & (SD) & DIF-detected & and explained & DIF significant & explanation-rate\\
+    \hline
+    13 & 4 & 0 & 0 & .03 & .00 & .03 & .000 \\
+    14 & 4 & 0 & .5 & .76 & .69 & .07 & .908 \\
+    15 & 4 & 0 & 1 & .98 & .82 & .16 & .837 \\
+    16 & 4 & 1 & 0 & .03 & .01 & .02 & .333 \\
+    17 & 4 & 1 & .5 & .59 & .49 & .10 & .831\\
+    18 & 4 & 1 & 1 & .98 & .84 & .14 & .857 \\
+    19 & 8 & 0 & 0 & .01 & .00 & .01 & .000 \\
+    20 & 8 & 0 & .5 & .81 & .75 & .06 & .923 \\
+    21 & 8 & 0 & 1 & .99 & .87 & .12 & .879 \\
+    22 & 8 & 1 & 0 & .02 & .00 & .02 & .000\\
+    23 & 8 & 1 & .5 & .66 & .61 & .05 & .924 \\
+    24 & 8 & 1 & 1 & .98 & .91 & .07 & .929 \\
+    \hline
+    \hline
+\end{tabular}
+
+\end{table}
+
+
+\end{landscape}
+\pagestyle{plain}
+
+\subsection{Empirical outcomes}
+General descriptives of the seven used countries are presented in Table \ref{tab:Country summary statistics}. The table shows that the countries differ in their mean response times and mean accuracy. It also shows that faster countries have higher accuracy ($r = -.91$). On an individual level, there seems no relation between accuracy and mean response time ($r = .00$). On item level, correlations between correct response and response times ranged from $r = -.22$ to $r = .47$. Summary statistics of the test items are reported in Table \ref{tab:item_summ}. Interesting is the high mean response time for the last item (ME72209). When this item is considered on country level, the mean times range from 106 to 216 seconds, which is higher than all the other questions. This might indicate either an interesting difference or a mistake in the measurement of the reaction times. 
+
+To have an idea what items might give relevant outcomes in the DIF explanation and DIF detection, Figures \ref{fig:model3} and \ref{fig:model4} show the score and time per county on each item respectively. In Figure \ref{fig:model3} item ME72002 differs a lot from the general trend. The non-Asian countries are expected to score higher since it is a 2-point question, but score even lower than average, indicating possible DIF. Especially England scores different than expected in this question. In Figure 4 item ME72209 is remarkable. The order is almost the opposite of the other items and of what could be expected given the general trend. This item was already marked as standing out considering the summary statistics as well. However, the accuracy of this item shows no sign for strong DIF. Another notable item in Figure \ref{fig:model4} is item ME72017, where the speed order deviates a lot from the other items with Taiwan being the slowest country while for the other items Taiwan is with the faster countries. In Figure \ref{fig:model3}, ME72017 does not have a remarkable order. However, the ratios between the countries is different for this item than the overall ratios.
+
+\begin{figure}[H]
+    \centering
+    \captionsetup{justification = centering, margin = 1cm}
+    \includegraphics[scale = 1]{{item_accuracy_2.jpg}}
+    \caption{\textit{Accuracy per country per test item.} \vspace{.5cm}}
+    \label{fig:model3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \captionsetup{justification = centering, margin = 1cm}
+    \includegraphics[scale = 1]{{item_speed.jpg}}
+    \caption{\textit{Response time (in seconds) per country per test item.} \vspace{.5cm}}
+    \label{fig:model4}
+\end{figure}
+
+
+\begin{table}[H]
+\caption{\label{tab:Country summary statistics}\\ Summary statistics of the e-TIMSS countries used in the analyses.}
+\begin{tabular}{c|c c c c c c}
+\hline
+    & \multicolumn{2}{c}{P-value} & \multicolumn{2}{c}{Response-time} & \multicolumn{2}{c}{Correct answers}\\
+    Country & Mean & SD & Mean & SD & Mean & SD \\
+    \hline
+    England & .464 & .503 & 71.5 & 61.2 & 14.4 & 7.41 \\
+    France & .343 & .482 & 88.6 & 73.4 & 10.6 & 5.89 \\
+    Hong Kong & .638 & .510 & 70.5 & 70.2 & 19.8 & 7.69 \\
+    Norway & .391 & .495 & 80.7 & 71.6 & 12.1 & 6.25 \\
+    Qatar & .319 & .472 & 88.1 & 80.4 & 9.9 & 6.82 \\
+    South Korea & .666 & .500 & 60.8 & 58.2 & 20.7 & 8.04 \\
+    Taiwan & .694 & .499 & 68.8 & 64.2 & 21.5 & 8.21 \\
+    \hline
+\end{tabular}
+\end{table}
+
+\begin{table} [p]
+\Centering
+\caption{\label{tab:item_summ}\\ TIMSS test item summary statistics. Items are in order of appearance in the test.}
+\begin{tabular}{c|c c c}
+\hline
+    Item & Mean p-value & Mean response-time & time-response-correlation \\
+    \hline
+    ME52024 & .568 & 63.8 & .10\\
+    ME52058A & .747 & 134.3 & -.06\\
+    ME52058B & .314 & 134.3 & -.14\\
+    ME52125 & .478 & 42.2 & .01\\
+    ME52229 & .509 & 44.5 & -.11\\
+    ME52063 & .553 & 36.8 & -.22\\
+    ME52072 & .663 & 19.4 & -.10\\
+    ME52146A & .544 & 159.1 & .11\\
+    ME52146B & .228 & 159.1 & -.05\\
+    ME52092 & .274 & 46.2 & .13\\
+    ME52046 & .315 & 65.5 & .08\\
+    ME52083 & .502 & 74.4 & -.07\\
+    ME52082 & .663 & 43.8 & .05\\
+    ME52161 & .776 & 42.7 & -.10\\
+    ME52418A & .466 & 126.5 & .13\\
+    ME52418B & .548 & 126.5 & .10\\
+    ME72007 & .721 & 67.1 & .06\\
+    ME72025 & .547 & 45.8 & .04\\
+    ME72017 & .261 & 100.4 & .27\\
+    ME72190 & .640 & 53.0 & -.08\\
+    ME72068 & .690 & 49.7 & -.03\\
+    ME72076 & .478 & 36.4 & .00\\
+    ME72056 & .437 & 67.6 & .04\\
+    ME72098 & .369 & 86.6 & .14\\
+    ME72103 & .497 & 80.9 & .01\\
+    ME72121 & .678 & 42.1 & -.05\\
+    ME72180 & .481 & 60.0 & -.07\\
+    ME72198 & .414 & 74.7 & -.02\\
+    ME72227 & .447 & 54.4 & .16\\
+    ME72170 & .561 & 48.1 & -.01\\
+    ME72209 & .257 & 159.6 & .47\\
+    \hline
+\end{tabular}
+\end{table}
+
+\newpage
+\subsubsection{DIF detection}
+The outcome of the DIF detection analysis is shown in Table \ref{tab:5 detection}. Notable is that every item is flagged as having some form of DIF for one or more countries. This might indicate that the MIMIC model is too sensitive in DIF detection. This could be supported by the fact that even items with only one country deviating from the general trend, such as ME72180 where the DIF is only due to Taiwan scoring different than expected, are flagged with DIF. There is no pattern in the DIF, so none of the countries has consistently more DIF or only DIF in one direction. 
+
+\subsubsection{DIF explanation}
+The results of the DIF explanation are summarized in Table \ref{tab:6 explanation}. During the DIF detection all items where found to have DIF for one or more countries. Therefore, the explanation analysis was run for every test item. The last column of Table \ref{tab:6 explanation} shows the relation between response time and a correct response. To see whether DIF is (partly) explained by the response times, only items where response times have a significant relation with answering correctly are relevant. Therefore, the outcomes of items that had no significant relation with response time are not shown in the table. 
+
+For most items, there are small changes, but these changes do not alter the detection of DIF and for these items response times do not explain the DIF. For items 52146A and 52092 countries that previously had no DIF are detected as having DIF when response times are added to the model. Here again, response times do not explain the DIF. Item 52082 has the countries with DIF and without DIF switched when response times are added. For some items, the DIF partly disappears for some countries (for example 52072, 52418A, and 72170). However, since there is no clear pattern, and the effect can be inconsistent over different countries in the same item, these changes might not be explanation of the DIF.
+
+\newgeometry{right = 2cm, left = 1.5cm}
+\begin{table}[p]
+ \caption{\label{tab:5 detection}\\
+ Estimates for the $\beta$-parameters and overall $\chi^2$-difference test as outcomes of the DIF detection in TIMSS.}
+    \begin{tabular}{c c | c c c c c c c}
+    \hline
+     Item & $\chi^2$-difference & England & France & Hong Kong & Norway & Qatar & South Korea & Taiwan\\
+      &\textit{(df = 7)} & & & & & & & \\
+     \hline
+      ME52024 & 102.56$^{***}$ & -.042 & -.013 & .087 & .502$^{***}$ & -.083 & .202$^{**}$ & -.352$^{***}$\\
+      ME52058A & 74.14$^{***}$ & .175$^{*}$ & .435$^{***}$ & -.140 & .326$^{***}$ & -.134$^{*}$ & .054 & .077\\
+      ME52058B & 62.92$^{***}$ & -.007 & -.195$^{*}$ & -.222$^{**}$ & .196$^{*}$ & .042 & -.157$^{**}$ & -.328$^{***}$\\
+      ME52125 & 148.65$^{***}$ & .338$^{***}$ & .342$^{***}$ & -.143$^{*}$ & -.738$^{***}$ & .097 & .082 & -.005 \\
+      ME52229 & 121.01$^{***}$ & -.299$^{***}$ & -.250$^{***}$ & -.084 & .-.208$^{**}$ & .315$^{***}$ & .429$^{***}$ & .281$^{***}$\\
+      ME52063 & 151.72$^{***}$ & -.062 & -.308$^{***}$ & .351$^{***}$ & -.454$^{***}$ & .134 & .303$^{***}$ & .535$^{***}$\\
+      ME52072 & 57.58$^{***}$ & .317$^{***}$ & -.017 & .296$^{***}$ & .150$^{*}$ & .233$^{***}$ & .085 & -.156$^{**}$\\
+      ME52146A & 51.32$^{***}$ & -.278$^{***}$ & .047 & -.150$^{*}$ & .154$^{*}$ & .003 & .095 & .345$^{***}$\\
+      ME52146B & 77.78$^{***}$ & -.233$^{**}$ & -.272$^{**}$ & -.303$^{***}$ & -.239$^{**}$ & -.034 & -.377$^{***}$ & -.121$^{*}$\\
+      ME52092 & 43.39$^{***}$ & -.229$^{***}$ & -.216$^{*}$ & -.185$^{*}$ & -.091 & .148 & .273$^{***}$ & -.112\\
+      ME52046 & 41.93$^{***}$ & .003 & .131$^{*}$ & -.133 & .008 & .147 & -.372$^{***}$ & -.167$^{**}$\\
+      ME52083 & 38.85$^{***}$ & -.162$^{*}$ & -.008 & .263$^{***}$ & .083 & -.303$^{***}$ & .152$^{*}$ & .072\\
+      ME52082 & 43.63$^{***}$ & -.035 & -.077 & .074 & .088 & -.133 & .410$^{***}$ & .279$^{***}$\\
+      ME52161 & 100.55$^{***}$ & .210$^{**}$ & .200$^{**}$ & -.260$^{**}$ & .631$^{***}$ & -.179$^{*}$ & .163 & .075\\
+      ME52418A & 28.06$^{***}$ & .103 & -.005 & .009 & .105 & .189$^{**}$ & -.201$^{***}$ & -.115$^{*}$\\
+      ME52418B & 27.57$^{***}$ & .162$^{*}$ & .145$^{*}$ & .185$^{*}$ & .087 & -.052 & -.099 & -.172$^{**}$\\
+      ME72007 & 118.71$^{***}$ & -.692$^{***}$ & -.116 & .069 & -.137$^{*}$ & -.148$^{*}$ & -.093 & .178$^{***}$\\
+      ME72025 & 47.99$^{***}$ & .047 & .054 & .040 & .386$^{***}$ & -.120 & -.036 & -.117$^{*}$\\
+      ME72017 & 111.95$^{***}$ & -.172$^{*}$ & -.333$^{***}$ & -.619$^{***}$ & -.322$^{***}$ & -.391$^{***}$ & .154$^{*}$ & .071\\
+      ME72190 & 36.79$^{***}$ & .199$^{**}$ & .268$^{***}$ & .025 & .094 & -.158$^{*}$ & -.035 & .114\\
+      ME72068 & 46.64$^{***}$ & .079 & .172$^{*}$ & .290$^{**}$ & -.041 & .266$^{***}$ & .198$^{*}$ & .164$^{*}$\\
+      ME72076 & 125.34$^{***}$ & -.095 & -.434$^{***}$ & .344$^{***}$ & -.511$^{***}$ & .281$^{***}$ & .090 & .066\\
+      ME72056 & 61.52$^{***}$ & -.007 & -.032 & .299$^{***}$ & -.208$^{**}$ & .197$^{**}$ & -.263$^{***}$ & -.087\\
+      ME72098 & 66.58$^{***}$ & -.371$^{***}$ & -.278$^{***}$ & .189$^{**}$ & -.178$^{**}$ & -.216$^{**}$ & -.007 & -.008\\
+      ME72103 & 36.89$^{***}$ & .215$^{**}$ & .192$^{**}$ & -.038 & -.144$^{*}$ & .158$^{*}$ & -.110 & -.129$^{*}$\\
+      ME72121 & 59.95$^{***}$ & .300$^{***}$ & -.293$^{***}$ & .109 & .257$^{***}$ & .095 & .137 & .046\\
+      ME72180 & 24.11$^{**}$ & .100 & .121 & .052 & .034 & -.081 & .088 & -.252$^{***}$\\
+      ME72198 & 86.66$^{***}$ & .001 & .027 & -.023 & -.594$^{***}$ & -.182$^{*}$ & .116$^{*}$ & .195$^{***}$\\
+      ME72227 & 53.96$^{***}$ & .052 & .056 & -.035 & .340$^{***}$ & -.286$^{***}$ & -.064 & -.062\\
+      ME72170 & 54.46$^{***}$ & .236$^{**}$ & .262$^{***}$ & -.211$^{**}$ & .251$^{***}$ & -.127 & -.051 & -.100\\
+      ME72209 & 78.82$^{***}$ & -.058 & .018 & -.064 & -.334$^{***}$ & -.124 & -.555$^{***}$ & .138$^{*}$\\
+      \hline
+    \end{tabular}\\
+    \begin{flushleft}
+    \footnotesize{\hspace{.3cm}\textit{Note:} $^* p<.05$, $^{**} p<.01$, $^{***} p<.001$ }\\
+    \end{flushleft}
+\end{table}
+\restoregeometry
+
+\pagestyle{empty}
+\begin{landscape}
+\begin{table}[hp]
+ \caption{\label{tab:6 explanation}\\
+ Estimates of the $\beta$-parameters as outcome of the DIF explanation with response times in TIMSS.}
+    \begin{tabular}{c | c c c c c c c c}
+    \hline\hline
+     Item & England & France & Hong Kong & Norway & Qatar & South Korea & Taiwan & Response Time\\
+     \hline
+      ME52058B & .050 & -.193$^{*}$ & -.174$^{*}$ & .249$^{***}$ & .100 & -.099 & -.287$^{***}$ & -.002$^{***}$\\
+      ME52229 & -.291$^{***}$ & -.320$^{***}$ & -.056 & .-.210$^{**}$ & .277$^{***}$ & .440$^{***}$ & .290$^{***}$ & -.004$^{***}$ \\
+      ME52063 & .006 & -.239$^{**}$ & .453$^{***}$ & -.385$^{***}$ & .139 & .387$^{***}$ & .638$^{***}$ & -.007$^{***}$ \\
+      ME52072 & .298$^{***}$ & -.095 & .296$^{**}$ & .086 & .141$^{*}$ & .063 & -.187$^{*}$ & -.009$^{***}$ \\
+      ME52146A & .248$^{***}$ & .506$^{***}$ & 356$^{***}$ & .619$^{***}$ & .472$^{***}$ & .604$^{***}$ & .876$^{***}$ & .002$^{***}$\\
+      ME52092 & -.369$^{***}$ & -.268$^{**}$ & -.326$^{***}$ & -.196$^{*}$ & .112 & .168$^{*}$ & -.213$^{**}$ & .004$^{***}$\\
+      ME52082 & -.282$^{***}$ & -.291$^{***}$ & -.139 & -.150$^{*}$ & -.389$^{***}$ & .183$^{*}$ & .075 & .004$^{***}$\\
+      ME52161 & .206$^{*}$ & .194$^{*}$ & -.241$^{**}$ & .666$^{***}$ & -.158$^{*}$ & .178 & .088 & -.006$^{***}$\\
+      ME52418A & .123 & -.087 & .037 & .094 & .155$^{*}$ & -.173$^{**}$ & -.094 & .003$^{***}$\\
+      ME52418B & .178$^{**}$ & .127 & .199$^{**}$ & .054 & -.066 & -.092 & -.158$^{*}$ & .002$^{***}$\\
+      ME72007 & -.692$^{***}$ & -.098 & .170$^{**}$ & -.146$^{*}$ & -.132 & -.017 & .269$^{***}$ & .006$^{***}$\\
+      ME72017 & -.237$^{**}$ & -.378$^{***}$ & -.693$^{***}$ & -.463$^{***}$ & -.477$^{***}$ & .136$^{*}$ & .027 & .004$^{***}$ \\
+      ME72190 & .220$^{**}$ & .310$^{***}$ & .051 & .133$^{*}$ & -.164$^{*}$ & -.010 & .126 & -.004$^{***}$ \\
+      ME72098 & -.468$^{***}$ & -.424$^{***}$ & .163$^{*}$ & -.296$^{***}$ & -.290$^{***}$ & -.060 & -.067 & .004$^{***}$\\
+      ME72121 & .309$^{***}$ & -.250$^{***}$ & .115 & .313$^{***}$ & .155$^{*}$ & .136 & .047 & -.003$^{***}$ \\
+      ME72180 & .078 & .176$^{*}$ & .010 & .021 & -.094 & .051 & -.272$^{***}$ & -.004$^{***}$ \\
+      ME72227 & -.020 & .122 & -.050 & .362$^{***}$ & -.193$^{**}$ & -.104 & -.062 & .003$^{***}$\\
+      ME72170 & .251$^{***}$ & .393$^{***}$ & -.195$^{**}$ & .341$^{***}$ & -.034 & -.054 & -.095 & -.003$^{***}$\\
+      ME72209 & -.011 & .044 & -.226$^{**}$ & -.165 & -.052 & -.514$^{***}$ & .063 & .004$^{***}$\\
+      \hline\hline
+    \end{tabular}\\
+    \begin{flushleft}
+    \footnotesize{\hspace{.3cm}\textit{Note:} $^* p<.05$, $^{**} p<.01$, $^{***} p<.001$ }\\
+    \end{flushleft}
+\end{table}
+\end{landscape}
+\pagestyle{plain}
+
+\section{Discussion}
+\label{sec: 5 discussion}
+
+This study focused on the use of process data in the explanation of DIF with the goal to improve distinction between meaningful DIF and DIF as a nuisance factor. A proposed model, based on the MIMIC model was tested on simulated data and afterwards tested with a real data example. The simulations show that there is high power for the MIMIC model to detect DIF in cases with stronger DIF and higher sample size. In cases with either weaker DIF or a smaller sample size, the power of the model dropped and was sometimes rather low. For the explanation of DIF with the simulated response times, the power levels follow a similar trend. All relative explanation rates are high, indicating that DIF is explained in most cases using this model, considering it is detected first. For the absolute explanation rates, the model only shows high power for cases that have both a high sample size and stronger DIF. These results mean that the model functions correctly in specific cases and can indeed be used to explain DIF with process data.
+
+When the model was used on the empirical data, the detection of DIF was high, with indication of DIF in all test-items. The process data failed to explain most of the DIF. In addition, the cases where DIF disappeared showed no coherent pattern, and cases where more DIF was introduced by adding process data were present as well. The finding that response times do not explain DIF in the TIMSS data can have multiple causes. Firstly, the response times deviated quite from how they were modeled in the simulations. No relation was found between response time and correct response, which was modeled and assumed as .4 in the simulations. A possible explanation for this relation being different, might be that TIMSS is a low-stake test for the test takers in several countries \parencite{TIMSS}. When a test is a low-stake test, the motivation but also the response times might differ from what is expected in a high-stake test \parencite{wise2009correlates, finn2015measuring}. The simulations might follow the case of a high-stake test, and the empirical data might be the case of a low-stake test. This might possibly explain the difference in findings.
+
+A second reason for the discrepancy in simulation results and empirical results can be that the response times within TIMSS showed some unexpected features. For example, some participant had unrealistically high response times, and for some questions combined times are provided, which cannot be reduced to the times of the individually scored items. These flaws might indicate that the measurement of the response times in TIMSS is not without mistakes, and potential explanation of DIF by the response times could be masked by this. Lastly, within TIMSS the DIF might correctly not be explained by the response times. However, to get more insight in whether this would be the case, the items should be investigated on the substantive content of the questions.
+
+Based on the findings of the simulations it can be concluded that the proposed model can be used to explain DIF with person-mean centered process data as the explaining covariate. Although in this study only response times are used as process data, the model can be adjusted for the use of other types of process data. There is no reason to assume the model to function differently for these other types of process data. Therefore, The answer to the central research question of this study is that the proposed model can be used to explain DIF with process data. Additionally, it can be stated that a new use for process data can be found in the explanation of DIF. However, an important consideration for the use of the proposed model and for explanation of DIF with process data in practice is that substantive theory must be used to decide what process data could be used to explain DIF. Since DIF can be seen as the flaw of measuring a second construct besides the intended one \parencite{ackerman1992didactic}, a substantive theory is needed to explain why a specific additional construct is captured by the process data of interest. In order to form such theory, it is needed to consider the content of the concerned items.
+
+In addition to a theoretical framework to use process data in explanation of DIF, some other practical issues of the current state of the area of this study should be considered, to place usability of the studied methods in a context. Firstly, the collection of process data in general is not flawless yet. As process data is collected in the current formats, finding the needed process data and to preprocess them in a compatible format with responses can be a difficult and mostly time consuming job. Since this data wrangling to correct formats is also prone to error, reproducibility and utility of using process data in DIF entanglement might be at question in this current state of data collection. Furthermore, modeling of the combination of response data and process data is still a relative young research area. As mentioned earlier, for the modeling of response times with response data quite some models and studies exist \parencite{entink2009statistical, molenaar2015generalized, van2007hierarchical}. However, for other types of process data studies and theories on models that combine process data with responses are more scarce. Good entanglement of DIF with process data would benefit if general modeling of process data improves. The current proposed model could be adapted so that it reflects more complicated modeling of process data, possibly resulting in a better explanation of DIF. Lastly, the simulations in this study showed that rather high sample sizes are needed for the model to be able to explain the DIF. This would mean that practical use would be mainly in the comparison of bigger groups. Examples here could be continents, grouped countries or genders. For smaller samples such as one booklet per country as in the empirical example, the current model might be of lesser use.
+
+Although the practical limitations, this model and study are only a first step in using process data in the explanation of DIF. No other studies that relate these topics seem to exist so far. The findings of this study provide therefore several points for further research. Firstly, it is interesting to see how the proposed model can be used with other types of process data. Based on more substantive theory, empirical examples with different types of process data could be studied to find more support for the proposed model. In addition, an empirical example that fits the proposed model better in general could be found to study the model in practice with more nuance. Furthermore, in further studies the model could be extended to include non-uniform DIF as well, as this was already discussed in this study, but not applied because of theoretical choices related to the empirical example. Another point for further research might be the assumptions of the MIMIC model. As stated earlier, the MIMIC model assumes equal variance for the latent trait over groups. Further research might study if these assumptions hold or if the model needs to be adjusted to account for difference in variances. Lastly, more simulation studies on the proposed model can be done to see how the model functions in other scenarios, such as with more groups, other sample sizes or with less test items. 
+
+All taken together, distinction between meaningful DIF and DIF as bias is important and process data can theoretically play a role in this disentanglement. However, given the current state of collection and modeling of process data, wide use of process data in the explanation of DIF is not feasible yet. Even with practical improvements around process data, strong theory is still needed for good explanation of DIF. Regardless of these objections, the current study forms a first step in the use of process data in the explanation of DIF, which with further research can contribute to improved measurements.
+
+\newpage
+\printbibliography
+\end{document}
+
