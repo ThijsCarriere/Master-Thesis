@@ -1,8 +1,9 @@
-# Master-Thesis
+# Master Thesis Thijs Carrière
 
-In this repository you can find all documents and code related to my Master Thesis project. 
-The project, called 'Using Process Data in the Explanation and Detection of Differential Item Functioning', tries to use process data (for example, response times) to deal with differential item functioning. The goals are to find a use for process data in DIF detection/explanation and to see if process data can distinguish between meaningful DIF and bias. Cancel changes
+In this repository you can find all documents and code related to my Master Thesis project for the [Research Master MSBBSS](https://www.uu.nl/masters/en/methodology-and-statistics-behavioural-biomedical-and-social-sciences) at Utrecht University. 
+The project, called 'Using Process Data in the Explanation and Detection of Differential Item Functioning', tries to use process data (for example, response times) to explain differential item functioning. The goals are to find a use for process data in DIF detection/explanation and to see if process data can be used to distinguish between meaningful DIF and bias.
 
+## Repository organisation
 The repository contains the following folders:<br><br>
 
 **1. Texts:**<br>
@@ -18,7 +19,7 @@ In this folder, all data used in this project can be found. The three subfolders
 **3. Scripts:**<br>
 In this folder, all scripts can be found that are used in the analyses and pre-processing of the project. With the use of these scripts, all results can be obtained and recreated.
 
+## License
 
-
-<br><br>
+## Maintenance
 If you have any questions about this project, you can always contact me by sending an e-mail to t.c.carriere@uu.nl.
