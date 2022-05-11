@@ -29,17 +29,18 @@ library(lavaan)
 ### 2. Reading in data and making list out of it
 
 The data sets of the different countries are loaded in.
+Please note that the correct files and paths to the files should be included manually.
 
 ```{r warning = FALSE, message = FALSE}
 
 # Loading in data of used countries 
-timss_fra <- read.spss("../../2. data/2.1 Raw TIMSS data/bsafram7.sav", to.data.frame = T)
-timss_eng <- read.spss("../../2. data/2.1 Raw TIMSS data/bsaengm7.sav", to.data.frame = T)
-timss_norw <- read.spss("../../2. data/2.1 Raw TIMSS data/bsanorm7.sav", to.data.frame = T)
-timss_hkg <- read.spss("../../2. data/2.1 Raw TIMSS data/bsahkgm7.sav", to.data.frame = T)
-timss_qat <- read.spss("../../2. data/2.1 Raw TIMSS data/bsaqatm7.sav", to.data.frame = T)
-timss_kor <- read.spss("../../2. data/2.1 Raw TIMSS data/bsakorm7.sav", to.data.frame = T)
-timss_twn <- read.spss("../../2. data/2.1 Raw TIMSS data/bsatwnm7.sav", to.data.frame = T)
+timss_fra <- read.spss("<PATH TO THE FILE: bsafram7.sav>", to.data.frame = T)
+timss_eng <- read.spss("<PATH TO THE FILE: bsaengm7.sav>", to.data.frame = T)
+timss_norw <- read.spss("<PATH TO THE FILE: bsanorm7.sav>", to.data.frame = T)
+timss_hkg <- read.spss(".<PATH TO THE FILE: bsahkgm7.sav>", to.data.frame = T)
+timss_qat <- read.spss("<PATH TO THE FILE: bsaqatm7.sav>", to.data.frame = T)
+timss_kor <- read.spss("<PATH TO THE FILE: bsakorm7.sav>", to.data.frame = T)
+timss_twn <- read.spss("<PATH TO THE FILE: bsatwnm7.sav>", to.data.frame = T)
 
 # Make list with dfs
 timss <- list(timss_fra, timss_eng, timss_hkg, timss_kor, timss_qat, timss_norw, timss_twn)
