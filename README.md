@@ -20,6 +20,9 @@ In this folder, all data used in this project can be found. The three subfolders
 In this folder, all scripts can be found that are used in the analyses and pre-processing of the project. With the use of these scripts, all results can be obtained and recreated.
 
 ## License
+All work in this archive is licensed under a [Creative Common Attribution 4.0 license](http://creativecommons.org/licenses/by/4.0/).<br><br>
+This means that you can 
 
 ## Maintenance
+This archive is open access and can be used in line with the license. Maintenance and updating is responsibility of the author, Thijs Carrière.
 If you have any questions about this project, you can always contact me by sending an e-mail to t.c.carriere@uu.nl.
