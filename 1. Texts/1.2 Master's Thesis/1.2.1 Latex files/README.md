@@ -1,6 +1,6 @@
 # Latex files of Master Thesis article
 
-The files in this folder can be used to reproduce the pdf document of the final text of this project.
+The files in this folder can be used to reproduce the pdf document of the final manuscript of this project.
 
 - `main.tex` contains the Latex code that reproduces the pdf file.
 - `interact.cls` contains the code for the layout of the pdf file.
