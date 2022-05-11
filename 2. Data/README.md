@@ -4,7 +4,7 @@ In this folder, all data used in the project can be found.
 
 
 ### **2.1 Raw TIMSS data** 
-In this folder, the raw TIMSS data used for the empirical example can be found. The data is obtained from https://timss2019.org/international-database/.
+In this folder, it is explained how the raw TIMSS data used for the empirical example can be obtained.
 The TIMSS documentation is stored as well in this folder. Some of the choices in this project are made based on the information found in this document.
 In order to process the raw data to the format used for the analyses in the project, the script 'timss_preprocessing.rmd' in the folder 'scripts' should be used.
 
