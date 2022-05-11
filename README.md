@@ -20,6 +20,7 @@ In this folder, all scripts can be found that are used in the analyses and pre-p
 
 ## License
 All work in this archive is licensed under a [Creative Common Attribution 4.0 license](http://creativecommons.org/licenses/by/4.0/).<br><br>
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br><br>
 This means that you can <br>
 - share: copy and redistribute the material in any medium or format
 - adapt: remix, transform, and build upon the material for any purpose, even commercially.`
