@@ -4,9 +4,9 @@
 
 In this repository you can find all documents and code related to my Master Thesis project for the [Research Master MSBBSS](https://www.uu.nl/masters/en/methodology-and-statistics-behavioural-biomedical-and-social-sciences) at Utrecht University. 
 
-*Name of the project*: Using Process Data in the Explanation and Detection of Differential Item Functioning
+*Name of the project: Using Process Data in the Explanation and Detection of Differential Item Functioning*
 
-*Abstract*: 
+*Abstract*: <br>
 Differential Item Functioning (DIF) is a broadly studied property of test items. DIF can be an unwanted form of bias, but can also indicate a meaningful difference. To distinguish between the two, the source of the DIF needs to be explained. With the growth of computerized testing, process data have become more widely available. Process data are data that are collected during the response process but are not the response itself, such as response times. These data might hold additional information that is not captured in the response itself, and might therefore be useful in explaining DIF. In this study, a new model based on the MIMIC model is suggested that can be used to investigate whether DIF can be explained with process data. The model is first tested with simulations, where the sample size, strength of the DIF, latent differences between groups, and the number of DIF items are altered. Next, the model is applied to empirical Trends in International Mathematics and Science Study (TIMSS) data to see whether DIF in TIMSS can be explained with response times. Based on the findings it is discussed how the proposed model can be used to explain DIF with process data, but that the current state of process data might form a hindrance for wider use. Further research with a wider variety of process data is recommended.
 
 ## Repository organisation
