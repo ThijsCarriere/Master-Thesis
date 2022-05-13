@@ -1,6 +1,6 @@
 # Master Thesis Thijs Carrière
 
-*Version 0.1, May 11th 2022*
+*Version 0.1, May 13th 2022*
 
 In this repository, you can find all documents and code related to my Master Thesis project for the [Research Master MSBBSS](https://www.uu.nl/masters/en/methodology-and-statistics-behavioural-biomedical-and-social-sciences) at Utrecht University. 
 
