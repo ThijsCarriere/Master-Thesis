@@ -17,5 +17,6 @@ All input files for these scripts can be found in folder 2.2.
 
 In this folder, the scripts for the simulation parts of the thesis can be found. The script `Simulation_script.Rmd` contains the written function, run for the simulations. It also containts the simulations itself. The output of the script is `Simulation_outcomes`, which can be found in folder 2.3. 
 In the script `Simulation_Findings.Rmd`, the Simulation_outcomes are analysed to the results presented in Table 1 and Table 2 of the thesis manuscript. 
+To learn more about how the simulation was set up and its conditions, please read section 3.1 of the Master thesis manuscript (Folder 1.2).
 
 *Please note that the numbering of the conditions in the scripts is not the same numbering as presented in the tables in the thesis document.* 
